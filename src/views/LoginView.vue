@@ -12,14 +12,14 @@
     </form>
   </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { loginUser } from '@/apis/loginApi';
 import { ref } from 'vue';
 const email = ref('');
 const password = ref('');
 
 const handleLogin = async () => {
-    
+    console.log("todo");
 }
 
 </script>
