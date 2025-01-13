@@ -1,6 +1,6 @@
 # er-climate-monitor-frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+This is the front-end of the [er-climate-monitor](https://github.com/MatteoIorio11/er-climate-monitor) project. The project aims to monitor climate data and visualize it through a web interface. This front-end is built with Vue 3 and Vite.
 
 ## Recommended IDE Setup
 
