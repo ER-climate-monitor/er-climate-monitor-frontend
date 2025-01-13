@@ -6,6 +6,11 @@ const routes = [
     name: 'map',
     component: () => import('../views/MapView.vue'),
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import ('../views/LoginView.vue')
+  }
 ];
 
 const router = createRouter({
