@@ -1,9 +1,7 @@
-<template>
-</template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-
-export default defineComponent({});
+<script setup lang="ts">
+import MapComponent from "./components/Map/MapComponent.vue";
 </script>
+
+<template>
+  <MapComponent />
+</template>
