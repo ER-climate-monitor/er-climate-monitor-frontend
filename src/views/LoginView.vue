@@ -13,11 +13,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-const email = ref('')
-const password = ref('')
+import { ref } from 'vue';
+const email = ref('');
+const password = ref('');
 
 const handleLogin = async () => {
-  console.log('todo')
-}
+  console.log('todo');
+};
 </script>
