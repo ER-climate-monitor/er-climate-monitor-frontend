@@ -13,7 +13,6 @@
   </template>
 
 <script setup lang="ts">
-import { loginUser } from '@/apis/loginApi';
 import { ref } from 'vue';
 const email = ref('');
 const password = ref('');
