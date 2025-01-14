@@ -1,4 +1,38 @@
 <template>
-  <div></div>
+  <div class="flex flex-col items-center justify-center min-h-screen p-4">
+    <!-- Select Sensor Type -->
+    <div class="w-full max-w-md mb-4">
+      <label for="sensor-type" class="block text-sm font-medium text-gray-700 mb-2">
+        Select Sensor Type
+      </label>
+      <select
+        id="sensor-type"
+        v-model="selectedSensorType"
+        @change="updateMap"
+        class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      >
+        <option value="">-- Select a sensor type --</option>
+        <option v-for="type in sensorTypes" :key="type" :value="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Map Component -->
+    <MapComponent :sensorType="selectedSensorType" />
+  </div>
 </template>
-<script lang="ts"></script>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import MapComponent from '@/components/Map/MapComponent.vue'
+
+// Define sensor types
+const sensorTypes = ref(['Temperature', 'Humidity', 'Air Quality'])
+const selectedSensorType = ref<string>('')
+
+// Function to handle map updates when sensor type changes
+const updateMap = () => {
+  console.log('Selected sensor type:', selectedSensorType.value)
+}
+</script>
