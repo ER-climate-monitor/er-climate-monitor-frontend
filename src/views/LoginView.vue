@@ -44,11 +44,14 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ErrorMessage from '@/components/Login/ErrorMessage.vue';
 
+const username = ref('');
+const password = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
-const handleLogin = (username, password) => {
-  if (username === 'admin' && password === 'password') {
+const handleLogin = (e: Event) => {
+  e.preventDefault();
+  if (username.value === 'admin' && password.value === 'password') {
     router.push('/home');
   } else {
     errorMessage.value = 'Invalid username or password.';
