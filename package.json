@@ -14,7 +14,8 @@
     "precommit": "npm run lint-staged && npm test && npm run build",
     "prepare": "husky",
     "preview": "vite preview",
-    "type-check": "vue-tsc --build"
+    "type-check": "vue-tsc --build",
+    "prelint-staged": "node -e \"if (parseFloat(process.version.slice(1)) < 22) { console.error('Node.js >= 22.0 is required'); process.exit(1); }\""
   },
   "dependencies": {
     "@vueuse/core": "^12.4.0",
@@ -63,6 +64,9 @@
     "*.md": [
       "prettier --write"
     ]
+  },
+  "engines": {
+    "node": ">=22.0.0"
   },
   "type": "module"
 }
