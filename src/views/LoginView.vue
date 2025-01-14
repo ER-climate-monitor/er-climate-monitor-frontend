@@ -40,20 +40,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import ErrorMessage from '@/components/Login/ErrorMessage.vue'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import ErrorMessage from '@/components/Login/ErrorMessage.vue';
 
-const errorMessage = ref('')
-const router = useRouter()
+const errorMessage = ref('');
+const router = useRouter();
 
 const handleLogin = (username, password) => {
   if (username === 'admin' && password === 'password') {
-    router.push('/home')
+    router.push('/home');
   } else {
-    errorMessage.value = 'Invalid username or password.'
+    errorMessage.value = 'Invalid username or password.';
   }
-}
+};
 </script>
 
 <style scoped>
