@@ -22,13 +22,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import MapComponent from '@/components/Map/MapComponent.vue'
+import { ref } from 'vue';
+import MapComponent from '@/components/Map/MapComponent.vue';
 
-const sensorTypes = ref(['Temperature', 'Humidity', 'Air Quality'])
-const selectedSensorType = ref<string>('')
+const sensorTypes = ref(['Temperature', 'Humidity', 'Air Quality']);
+const selectedSensorType = ref<string>('');
 
 const updateMap = () => {
-  console.log('Selected sensor type:', selectedSensorType.value)
-}
+  console.log('Selected sensor type:', selectedSensorType.value);
+};
 </script>

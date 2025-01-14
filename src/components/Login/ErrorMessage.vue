@@ -2,7 +2,7 @@
   <p v-if="message" class="error">{{ message }}</p>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({
   message: {
     type: String,
