@@ -10,7 +10,6 @@
     "dev": "vite",
     "format": "prettier --write src/",
     "format:check": "prettier --check .",
-    "mock-server": "json-server --watch mock-server/db.json --config mock-server/server.json",
     "precommit": "npm run lint-staged && npm test && npm run build",
     "prepare": "husky",
     "preview": "vite preview",
