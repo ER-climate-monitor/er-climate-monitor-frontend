@@ -4,8 +4,16 @@
 
 <script setup lang="ts">
 import leaflet from 'leaflet';
-import { onMounted } from 'vue';
 import { userMarker } from '@/stores/mapStore';
+import { onMounted, watch } from 'vue';
+import type { PropType } from 'vue';
+
+const { locations } = defineProps({
+  locations: {
+    type: Array as PropType<{ latitude: number; longitude: number }[]>,
+    required: true,
+  },
+});
 
 let map: leaflet.Map;
 
@@ -18,6 +26,8 @@ onMounted(() => {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     })
     .addTo(map);
+
+  addMarkers(locations);
 
   fetch('/er.geojson')
     .then((res) => res.json())
@@ -35,6 +45,30 @@ onMounted(() => {
         .addTo(map);
     });
 });
+const addMarkers = (locations: { latitude: number; longitude: number }[]) => {
+  locations.forEach((location) => {
+    leaflet
+      .marker([location.latitude, location.longitude])
+      .addTo(map)
+      .bindPopup(`Latitude: ${location.latitude}, Longitude: ${location.longitude}`);
+  });
+};
+
+watch(
+  () => locations,
+  (newLocations) => {
+    if (map) {
+      map.eachLayer((layer) => {
+        if (layer instanceof leaflet.Marker || layer instanceof leaflet.Popup) {
+          map.removeLayer(layer);
+        }
+      });
+
+      addMarkers(newLocations);
+    }
+  },
+  { deep: true },
+);
 </script>
 
 <style scoped>
