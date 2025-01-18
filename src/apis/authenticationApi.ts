@@ -3,12 +3,13 @@ import { config } from '@/config/config';
 import {
   API_KEY_HEADER,
   LOGIN_ACTION,
+  REGISTER_ACTION,
   USER_ACTION,
   USER_EMAIL_HEADER,
   USER_PASSWORD_HEADER,
 } from '@/headers/userHeaders';
 
-// const REGISTER_PATH = config.apiBaseUrl + '/authentication/user/register';
+const REGISTER_PATH = config.apiBaseUrl + '/authentication/user/register';
 const LOGIN_PATH = config.apiBaseUrl + '/authentication/user/login';
 const LOGIN_ADMIN_PATH = config.apiBaseUrl + '/authentication/user/admin/login';
 
@@ -40,4 +41,12 @@ async function loginAdmin(email: string, password: string, apiKey: string) {
   });
 }
 
-export { loginUser, loginAdmin, checkEmail, checkPassword };
+async function registerUser(email: string, password: string) {
+  return await axios.post(REGISTER_PATH, {
+    [USER_ACTION]: REGISTER_ACTION,
+    [USER_EMAIL_HEADER]: email,
+    [USER_PASSWORD_HEADER]: password,
+  });
+}
+
+export { loginUser, loginAdmin, checkEmail, checkPassword, registerUser };
