@@ -72,6 +72,8 @@ import { useRouter } from 'vue-router';
 import ErrorMessage from '@/components/Login/ErrorMessage.vue';
 import { checkEmail, checkPassword, loginAdmin, loginUser } from '@/apis/authenticationApi';
 import { AxiosError, HttpStatusCode } from 'axios';
+import { USER_JWT_TOKEN_HEADER } from '@/headers/userHeaders';
+import { setToken } from '@/utils/manageToken';
 
 const email = ref('');
 const password = ref('');
@@ -103,7 +105,7 @@ const handleLogin = async (e: Event) => {
     const response = await loginFn(email.value, password.value, isAdmin.value ? apiKey.value : '');
 
     if (response.status === HttpStatusCode.Ok) {
-      // TODO: save JWT token
+      setToken(response.data[USER_JWT_TOKEN_HEADER]);
       router.push('/home');
     }
   } catch (error) {
