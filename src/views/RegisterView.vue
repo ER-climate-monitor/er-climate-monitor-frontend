@@ -40,20 +40,47 @@
       >
         Login
       </button>
+      <ErrorMessage :message="errorMessage" />
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
+import ErrorMessage from '@/components/Login/ErrorMessage.vue';
+import { checkEmail, checkPassword, registerUser } from '@/apis/authenticationApi';
+import { USER_JWT_TOKEN_HEADER } from '@/headers/userHeaders';
+import { setToken } from '@/utils/manageToken';
+import { HttpStatusCode } from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
+const errorMessage = ref('');
 const router = useRouter();
 
 const handleRegister = async (e: Event) => {
   e.preventDefault();
+  if (!checkEmail(email.value)) {
+    errorMessage.value = 'Wrong Email Format';
+  }
+
+  if (!checkPassword(password.value)) {
+    errorMessage.value = 'Wrong Password Format';
+  }
+
+  try {
+    const response = await registerUser(email.value, password.value);
+
+    if (response.status === HttpStatusCode.Created) {
+      setToken(response.data[USER_JWT_TOKEN_HEADER]);
+      router.push('/home');
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      errorMessage.value = error.message;
+    }
+  }
 };
 
 const goToLogin = (e: Event) => {
