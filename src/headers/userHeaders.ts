@@ -1,10 +1,14 @@
-const USER_EMAIL_HEADER = 'X-User-Email';
-const USER_PASSWORD_HEADER = 'X-User-Password';
-const USER_JWT_TOKEN_HEADER = 'X-User-Token';
-const USER_JWT_TOKEN_EXPIRATION_HEADER = 'X-User-Token-Expiration';
+const USER_EMAIL_HEADER = 'userEmail';
+const USER_PASSWORD_HEADER = 'userPassword';
+const USER_JWT_TOKEN_HEADER = 'userToken';
+const USER_JWT_TOKEN_EXPIRATION_HEADER = 'userTokenExpiration';
+const USER_ACTION = 'action';
+
+const REGISTER_ACTION = 'register';
+const LOGIN_ACTION = 'login';
 
 const ERROR_TAG = 'X-Error-Message';
-const API_KEY_HEADER = 'X-Api-Key';
+const API_KEY_HEADER = 'apiKey';
 
 export {
   USER_EMAIL_HEADER,
@@ -13,4 +17,7 @@ export {
   USER_JWT_TOKEN_EXPIRATION_HEADER,
   ERROR_TAG,
   API_KEY_HEADER,
+  USER_ACTION,
+  LOGIN_ACTION,
+  REGISTER_ACTION,
 };
