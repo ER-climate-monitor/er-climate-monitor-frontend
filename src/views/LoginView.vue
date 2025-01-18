@@ -53,6 +53,13 @@
       >
         Login
       </button>
+      <button
+        type="button"
+        @click="goToRegister"
+        class="w-full bg-gray-600 text-white py-2 rounded-lg font-medium hover:bg-gray-700 transition duration-300"
+      >
+        Register
+      </button>
 
       <ErrorMessage :message="errorMessage" />
     </form>
@@ -63,8 +70,8 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ErrorMessage from '@/components/Login/ErrorMessage.vue';
-import { checkEmail, checkPassword, loginAdmin, loginUser } from '@/apis/loginApi';
-import { AxiosError, HttpStatusCode, type AxiosResponse } from 'axios';
+import { checkEmail, checkPassword, loginAdmin, loginUser } from '@/apis/authenticationApi';
+import { AxiosError, HttpStatusCode } from 'axios';
 
 const email = ref('');
 const password = ref('');
@@ -73,28 +80,46 @@ const isAdmin = ref(false);
 const apiKey = ref('');
 const router = useRouter();
 
+const goToRegister = () => {
+  router.push('/register');
+};
+
 const handleLogin = async (e: Event) => {
   e.preventDefault();
-  if (checkEmail(email.value) && checkPassword(password.value)) {
-    try {
-      let response: AxiosResponse<unknown, unknown>;
-      if (isAdmin.value) {
-        response = await loginAdmin(email.value, password.value, apiKey.value);
-      } else {
-        response = await loginUser(email.value, password.value);
-      }
-      if (response.status === HttpStatusCode.Ok) {
-        router.push('/home');
-      }
-    } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        if (error.status === HttpStatusCode.Unauthorized) {
-          errorMessage.value = 'Wrong Api Key';
-        }
-      } else {
-        errorMessage.value = 'Invalid username or password.';
-      }
+
+  if (!checkEmail(email.value)) {
+    errorMessage.value = 'Wrong Email format';
+    return;
+  }
+
+  if (!checkPassword(password.value)) {
+    errorMessage.value = 'Wrong Password format';
+    return;
+  }
+
+  const loginFn = isAdmin.value ? loginAdmin : loginUser;
+
+  try {
+    const response = await loginFn(email.value, password.value, isAdmin.value ? apiKey.value : '');
+
+    if (response.status === HttpStatusCode.Ok) {
+      // TODO: save JWT token
+      router.push('/home');
     }
+  } catch (error) {
+    handleLoginError(error);
+  }
+};
+
+const handleLoginError = (error: unknown) => {
+  if (error instanceof AxiosError && error.response) {
+    if (error.response.status === HttpStatusCode.Unauthorized) {
+      errorMessage.value = 'Wrong Api Key';
+    } else {
+      errorMessage.value = 'Invalid username or password.';
+    }
+  } else {
+    errorMessage.value = 'An unknown error occurred.';
   }
 };
 </script>
