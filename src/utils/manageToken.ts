@@ -4,4 +4,8 @@ function setToken(token: string) {
   localStorage.setItem(USER_JWT_TOKEN_HEADER, token);
 }
 
-export { setToken };
+function getToken(): string {
+  return localStorage.getItem(USER_JWT_TOKEN_HEADER) || '';
+}
+
+export { setToken, getToken };
