@@ -8,7 +8,7 @@
 
     <!-- Action Buttons -->
     <div class="sensor-actions">
-      <button @click="shutOffSensor" class="action-button shut-off">Shut Off</button>
+      <button @click="shutDownSensor" class="action-button shut-off">Shut Down</button>
       <button @click="openSettings" class="action-button settings">Settings</button>
     </div>
   </div>
@@ -26,7 +26,7 @@ const props = defineProps({
   },
 });
 
-const shutOffSensor = () => {
+const shutDownSensor = () => {
   console.log(props.ip);
 };
 const openSettings = () => {
