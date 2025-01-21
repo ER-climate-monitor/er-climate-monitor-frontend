@@ -16,6 +16,11 @@ const routes = [
     name: 'register',
     component: () => import('../views/RegisterView.vue'),
   },
+  {
+    path: '/sensors',
+    name: 'sensors',
+    component: () => import('../views/ListSensorView.vue'),
+  },
 ];
 
 const router = createRouter({
