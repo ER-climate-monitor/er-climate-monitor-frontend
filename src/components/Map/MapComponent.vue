@@ -4,7 +4,6 @@
 
 <script setup lang="ts">
 import leaflet from 'leaflet';
-import { userMarker } from '@/stores/mapStore';
 import { onMounted, watch } from 'vue';
 import type { PropType } from 'vue';
 
@@ -18,7 +17,7 @@ const { locations } = defineProps({
 let map: leaflet.Map;
 
 onMounted(() => {
-  map = leaflet.map('map').setView([userMarker.value.latitude, userMarker.value.longitude], 13);
+  map = leaflet.map('map').setView([44.5, 10.9], 8); //center position on emilia-romagna
 
   leaflet
     .tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
