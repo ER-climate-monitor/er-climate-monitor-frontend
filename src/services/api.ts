@@ -1,18 +1,15 @@
-export const fetchSensorLocations = async (sensorType: string) => {
+import axios from 'axios';
+import type { SensorLocation } from '@/types/SensorLocation';
+
+export const fetchSensorLocations = async (sensorType: string): Promise<SensorLocation[]> => {
   if (!sensorType) return [];
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/v0/sensor/${sensorType.toLowerCase()}/positions`,
+    const response = await axios.get<SensorLocation[]>(
+      `http://localhost:3000/v0/sensor/${sensorType.toLowerCase()}/locations`,
     );
 
-    if (!response.ok) throw new Error('Failed to fetch sensor locations');
-
-    const data = await response.json();
-    return data.undefined.map((item: { latitude: number; longitude: number }) => ({
-      latitude: item.latitude,
-      longitude: item.longitude,
-    }));
+    return response.data;
   } catch (error) {
     console.error('Error fetching sensor locations:', error);
     return [];
