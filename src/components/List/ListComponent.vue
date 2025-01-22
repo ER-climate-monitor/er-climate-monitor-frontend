@@ -3,7 +3,8 @@
     <!-- Sensor Information -->
     <div class="sensor-info">
       <label class="sensor-label">IP: {{ ip }}</label>
-      <label class="sensor-label">Address: {{ port }}</label>
+      <label class="sensor-label">Name: {{ name }}</label>
+      <label class="sensor-label">Port: {{ port }}</label>
     </div>
 
     <!-- Action Buttons -->
@@ -15,8 +16,19 @@
 </template>
 
 <script setup lang="ts">
+import { shutDownSensorApi } from '@/apis/sensorRegistryApi';
+import { getToken } from '@/utils/manageToken';
+import { HttpStatusCode } from 'axios';
+import { defineEmits } from 'vue';
+
+const emit = defineEmits(['removeSensor']);
+
 const props = defineProps({
   ip: {
+    type: String,
+    default: '',
+  },
+  name: {
     type: String,
     default: '',
   },
@@ -26,8 +38,11 @@ const props = defineProps({
   },
 });
 
-const shutDownSensor = () => {
-  console.log(props.ip);
+const shutDownSensor = async () => {
+  const response = await shutDownSensorApi(getToken(), props.ip, props.port);
+  if (response.status === HttpStatusCode.Ok) {
+    emit('removeSensor', { ip: props.ip, port: props.port });
+  }
 };
 const openSettings = () => {
   console.log(props.ip);
