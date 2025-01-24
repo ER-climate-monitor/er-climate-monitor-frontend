@@ -8,7 +8,7 @@ const REGISTER_ACTION = 'register';
 const LOGIN_ACTION = 'login';
 
 const ERROR_TAG = 'X-Error-Message';
-const API_KEY_HEADER = 'apiKey';
+const API_KEY_HEADER = 'x-api-key';
 
 export {
   USER_EMAIL_HEADER,
