@@ -8,7 +8,7 @@ const REGISTER_ACTION = 'register';
 const LOGIN_ACTION = 'login';
 
 const ERROR_TAG = 'X-Error-Message';
-const API_KEY_HEADER = 'x-api-key';
+const USER_TOKEN_HEADER = 'x-user-token';
 
 export {
   USER_EMAIL_HEADER,
@@ -16,7 +16,7 @@ export {
   USER_JWT_TOKEN_HEADER,
   USER_JWT_TOKEN_EXPIRATION_HEADER,
   ERROR_TAG,
-  API_KEY_HEADER,
+  USER_TOKEN_HEADER,
   USER_ACTION,
   LOGIN_ACTION,
   REGISTER_ACTION,
