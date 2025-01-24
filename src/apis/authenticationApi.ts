@@ -33,12 +33,19 @@ async function loginUser(email: string, password: string) {
 }
 
 async function loginAdmin(email: string, password: string, apiKey: string) {
-  return await axios.post(LOGIN_ADMIN_PATH, {
-    [USER_ACTION]: LOGIN_ACTION,
-    [USER_EMAIL_HEADER]: email,
-    [USER_PASSWORD_HEADER]: password,
-    [API_KEY_HEADER]: apiKey,
-  });
+  return await axios.post(
+    LOGIN_ADMIN_PATH,
+    {
+      [USER_ACTION]: LOGIN_ACTION,
+      [USER_EMAIL_HEADER]: email,
+      [USER_PASSWORD_HEADER]: password,
+    },
+    {
+      headers: {
+        [API_KEY_HEADER]: apiKey,
+      },
+    },
+  );
 }
 
 async function registerUser(email: string, password: string) {
