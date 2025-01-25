@@ -19,29 +19,28 @@ import { ref } from 'vue';
 import AlertSelector from '@/components/Notification/AlertSelector.vue';
 import AlertList from '@/components/Notification/AlertList.vue';
 import ExpandedAlert from '@/components/Notification/ExpandedAlert.vue';
-import { type Notification, type Topic } from '@/stores/notificationStore';
+import { type Notification, type Topic, useNotificationState } from '@/stores/notificationStore';
+import { establishSubscription, subscribeToTopic } from '@/apis/notificationsApi';
+import Logger from 'js-logger';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
-    notifications: {
-        type: Array<Notification>,
-        required: true,
-    },
-});
+Logger.useDefaults();
 
 const selectedAlert = ref<Notification | null>(null);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const handleSubscriptionChange = (args: { topic: Topic }) => {
-    // LOGIC to subcribe to topic and register web socket
-    // const response = await axios.post('/api/subscribe', { topic, threshold })
-    // const { uid, topicAddr } = response.data
-    // addSubscription({
-    //   topic,
-    //   threshold,
-    //   uid,
-    //   topicAddr
-    // })
-    // registerWebSocketConnection(uid, topicAddr)
+
+const { notifications, prependNotification } = useNotificationState();
+
+const handleSubscriptionChange = async (ev: Topic) => {
+    try {
+        const sub = await subscribeToTopic(ev);
+        if (!sub) {
+            Logger.error('Failed to subscribe for: ', ev);
+            return;
+        }
+        Logger.info('Subscribing for: ', sub);
+        establishSubscription<Notification>(sub.uid, sub.topicAddr, prependNotification);
+    } catch (err) {
+        Logger.error(`Something went wrong during subscription for ${JSON.stringify(ev)}: `, err);
+    }
 };
 
 const openExpandedAlert = (alert: Notification) => {

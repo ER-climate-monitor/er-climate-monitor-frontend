@@ -61,17 +61,17 @@
 <script setup lang="ts">
 import { fetchNotificationTopics } from '@/apis/notificationsApi';
 import { type SensorInfos, type Topic } from '@/stores/notificationStore';
-import { computed, ref, watch } from 'vue';
+import Logger from 'js-logger';
+import { computed, onMounted, ref, watch } from 'vue';
+
+Logger.useDefaults();
 
 const typeNames = ref<string[]>([]);
-
 const selectedType = ref<string | undefined>();
 const selectedSensor = ref<string | undefined>();
 const selectedQuery = ref<string | undefined>();
-
 const isLoadingTopics = ref(false);
 const topicsError = ref('');
-
 const topics = ref<SensorInfos[]>([]);
 
 const sensorNames = computed(() => {
@@ -90,6 +90,10 @@ const queries = computed(() => {
     }
 });
 
+const emit = defineEmits<{
+    'subscription-changed': [topic: Topic];
+}>();
+
 const canSubscribe = computed(() => selectedType.value && !isLoadingTopics.value);
 
 const subscribe = () => {
@@ -99,7 +103,7 @@ const subscribe = () => {
         sensorName: selectedSensor.value,
         query: selectedQuery.value,
     };
-    emit('subscription-changed', { topic });
+    emit('subscription-changed', topic);
 };
 
 const subscribeButtonText = computed(() => {
@@ -128,9 +132,5 @@ watch(selectedType, () => {
     selectedQuery.value = undefined;
 });
 
-const emit = defineEmits<{
-    'subscription-changed': [{ topic: Topic }];
-}>();
-
-fetchTopics();
+onMounted(fetchTopics);
 </script>

@@ -1,3 +1,5 @@
+import { useLocalStorage } from '@vueuse/core';
+
 export type SensorInfos = {
     name: string;
     type: string;
@@ -35,4 +37,17 @@ export const getAlertIcon = (alertType: string): string => {
         temperature: '🌡️',
     };
     return icons[alertType] || '⚠️';
+};
+
+export const useNotificationState = () => {
+    const notifications = useLocalStorage<Notification[]>('notifications', []);
+
+    const prependNotification = (n: Notification) => {
+        notifications.value.unshift(n);
+    };
+
+    return {
+        notifications,
+        prependNotification,
+    };
 };
