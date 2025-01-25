@@ -1,38 +1,38 @@
-export interface Topic {
-  id: string;
-  name: string;
-  description: string;
-}
+export type SensorInfos = {
+    name: string;
+    type: string;
+    queries: string[];
+};
 
-export interface TopicQuery {
-  id: string;
-  topicId: string;
-  name: string;
-  description: string;
-}
+export type Topic = {
+    topic: string;
+    sensorName?: string;
+    query?: string;
+};
 
-export interface Notification {
-  id: string;
-  type: string;
-  summary: string;
-  description: string;
-  timestamp: string;
-  read: boolean;
-  topicId: string;
-  queryId: string;
-}
+/**
+ * TODO: remember to generate id in notification service
+ */
+export type Notification = {
+    id: string;
+    sensorName: string;
+    type: string;
+    value: number;
+    unit: string;
+    timestamp: number;
+    query: { value: number; name: string };
+};
 
-export interface NotificationSubscription {
-  topic: Topic;
-  query: TopicQuery;
-  uid: string;
-  topicAddr: string;
-}
+export type NotificationSubscription = {
+    topic: Topic;
+    uid: string;
+    topicAddr: string;
+};
 
 export const getAlertIcon = (alertType: string): string => {
-  const icons: { [key: string]: string } = {
-    'hydro-level': '💧',
-    temperature: '🌡️',
-  };
-  return icons[alertType] || '⚠️';
+    const icons: { [key: string]: string } = {
+        'hydro-level': '💧',
+        temperature: '🌡️',
+    };
+    return icons[alertType] || '⚠️';
 };

@@ -1,21 +1,21 @@
 <template>
-  <div class="space-y-4">
-    <div
-      v-for="alert in notifications"
-      :key="alert.id"
-      @click="$emit('view-details', alert)"
-      class="p-4 border rounded cursor-pointer hover:bg-gray-50"
-    >
-      <div class="flex items-center gap-3">
-        <div class="text-2xl">
-          {{ getAlertIcon(alert.type) }}
+    <div class="space-y-4">
+        <div
+            v-for="alert in notifications"
+            :key="alert.id"
+            @click="$emit('view-details', alert)"
+            class="p-4 border rounded cursor-pointer hover:bg-gray-50"
+        >
+            <div class="flex items-center gap-3">
+                <div class="text-2xl">
+                    {{ getAlertIcon(alert.type) }}
+                </div>
+                <div>
+                    <p class="text-gray-600">{{ `${alert.type}.${alert.sensorName}.${alert.query}` }}</p>
+                </div>
+            </div>
         </div>
-        <div>
-          <p class="text-gray-600">{{ alert.summary }}</p>
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -23,9 +23,9 @@ import { type Notification, getAlertIcon } from '@/stores/notificationStore';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
-  notifications: {
-    type: Array<Notification>,
-    required: true,
-  },
+    notifications: {
+        type: Array<Notification>,
+        required: true,
+    },
 });
 </script>
