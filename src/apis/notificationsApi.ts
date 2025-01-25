@@ -1,5 +1,6 @@
 import { config } from '@/config/config';
 import type { NotificationSubscription, SensorInfos, Topic } from '@/stores/notificationStore';
+import { getToken } from '@/utils/manageToken';
 import axios, { HttpStatusCode } from 'axios';
 import Logger from 'js-logger';
 
@@ -58,7 +59,7 @@ function httpRequest<B, X>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url: strin
 }
 
 function retrieveUserToken(): string {
-    return '';
+    return getToken();
 }
 
 export { fetchNotificationTopics, subscribeToTopic };
