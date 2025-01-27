@@ -47,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import { checkSensorDays } from '@/apis/sensorRegistryApi';
 import { UPDATE_CRONJOB_DAYS, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
 import { ref, reactive } from 'vue';
 
@@ -88,10 +89,12 @@ const close = () => {
 };
 
 const addDay = () => {
-    if (newDay.value.trim()) {
+    if (newDay.value.trim() && checkSensorDays(newDay.value)) {
         prepareUpdateDays(newDay.value);
         emit('save', message);
         close();
+    } else {
+        alert('The input dayus should be formated like so: [0-6] and the values must be included in the range [0, 6]');
     }
 };
 
