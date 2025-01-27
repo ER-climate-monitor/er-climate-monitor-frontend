@@ -7,6 +7,15 @@ const GET_ALL_SENSOR_PATH = config.apiBaseUrl + '/sensor/all';
 const SHUT_DOWN_SENSOR_PATH = config.apiBaseUrl + '/sensor/shutdown';
 const UPDATE_SENSOR_PATH = config.apiBaseUrl + '/sensor/update';
 
+function checkSensorDays(days: string) {
+    const regex = /^[0-6]-[0-6]$/;
+    if (!regex.test(days)) {
+        return false;
+    }
+    const splitted_days = days.split('-');
+    return splitted_days[0] <= splitted_days[1];
+}
+
 async function getAllSensors(token: string) {
     const headers = { [USER_TOKEN_HEADER]: token };
     return await axios.get(GET_ALL_SENSOR_PATH, { headers: headers });
@@ -37,4 +46,4 @@ async function updateSensorName(token: string, ip: string, port: number, newName
     return await updateSensorApi(token, ip, String(port), { action: UPDATE_NAME_ACTION, [SENSOR_NAME]: newName });
 }
 
-export { getAllSensors, shutDownSensorApi, updateSensorName };
+export { getAllSensors, shutDownSensorApi, updateSensorName, checkSensorDays };
