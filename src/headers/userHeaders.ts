@@ -9,6 +9,7 @@ const LOGIN_ACTION = 'login';
 
 const ERROR_TAG = 'X-Error-Message';
 const USER_TOKEN_HEADER = 'x-user-token';
+const USER_APIKEY_HEADER = 'x-api-key';
 
 export {
     USER_EMAIL_HEADER,
@@ -20,4 +21,5 @@ export {
     USER_ACTION,
     LOGIN_ACTION,
     REGISTER_ACTION,
+    USER_APIKEY_HEADER,
 };
