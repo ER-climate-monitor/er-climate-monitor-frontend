@@ -26,7 +26,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import SensorSettingsModal from '@/components/modal/SensorSettingsModal.vue';
-import { shutDownSensorApi, updateSensorName } from '@/apis/sensorRegistryApi';
+import {
+    shutDownSensorApi,
+    updateSensorCronJobDays,
+    updateSensorCronJobTime,
+    updateSensorName,
+} from '@/apis/sensorRegistryApi';
 import { getToken } from '@/utils/manageToken';
 import { HttpStatusCode } from 'axios';
 import { defineEmits } from 'vue';
@@ -61,9 +66,26 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
             }
         }
         case UPDATE_CRONJOB_DAYS: {
-            console.log(newSettings.days);
+            const response = await updateSensorCronJobDays(token, props.ip, props.port, newSettings.days);
+            if (response.status !== HttpStatusCode.Ok) {
+                alert('Error');
+            } else {
+                location.reload();
+            }
         }
         case UPDATE_CRONJOB_TIME: {
+            const response = await updateSensorCronJobTime(
+                token,
+                props.ip,
+                props.port,
+                newSettings.hour,
+                newSettings.minute,
+            );
+            if (response.status !== HttpStatusCode.Ok) {
+                alert('Error');
+            } else {
+                location.reload();
+            }
         }
     }
 };
