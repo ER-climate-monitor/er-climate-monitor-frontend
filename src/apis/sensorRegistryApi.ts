@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const GET_ALL_SENSOR_PATH = config.apiBaseUrl + '/sensor/all';
 const SHUT_DOWN_SENSOR_PATH = config.apiBaseUrl + '/sensor/shutdown';
+const UPDATE_SENSOR_PATH = config.apiBaseUrl + +'/sensor/update';
 
 async function getAllSensors(token: string) {
     const headers = { [USER_TOKEN_HEADER]: token };
@@ -20,4 +21,9 @@ async function shutDownSensorApi(token: string, ip: string, port: number) {
     });
 }
 
-export { getAllSensors, shutDownSensorApi };
+async function updateSensorApi(token: string, newInformation: { [key: string]: string }) {
+    const headers = { [USER_TOKEN_HEADER]: token };
+    return await axios.put(UPDATE_SENSOR_PATH, newInformation, { headers: headers });
+}
+
+export { getAllSensors, shutDownSensorApi, updateSensorApi };
