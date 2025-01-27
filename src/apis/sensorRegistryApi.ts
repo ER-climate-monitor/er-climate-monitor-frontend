@@ -1,11 +1,11 @@
 import { config } from '@/config/config';
-import { SENSOR_IP, SENSOR_PORT } from '@/headers/sensorHeaders';
+import { SENSOR_IP, SENSOR_NAME, SENSOR_PORT, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
 import { USER_TOKEN_HEADER } from '@/headers/userHeaders';
 import axios from 'axios';
 
 const GET_ALL_SENSOR_PATH = config.apiBaseUrl + '/sensor/all';
 const SHUT_DOWN_SENSOR_PATH = config.apiBaseUrl + '/sensor/shutdown';
-const UPDATE_SENSOR_PATH = config.apiBaseUrl + +'/sensor/update';
+const UPDATE_SENSOR_PATH = config.apiBaseUrl + '/sensor/update';
 
 async function getAllSensors(token: string) {
     const headers = { [USER_TOKEN_HEADER]: token };
@@ -21,9 +21,20 @@ async function shutDownSensorApi(token: string, ip: string, port: number) {
     });
 }
 
-async function updateSensorApi(token: string, newInformation: { [key: string]: string }) {
+async function updateSensorApi(token: string, ip: string, port: string, newInformation: { [key: string]: string }) {
     const headers = { [USER_TOKEN_HEADER]: token };
-    return await axios.put(UPDATE_SENSOR_PATH, newInformation, { headers: headers });
+    const data: { [key: string]: string } = {
+        [SENSOR_IP]: ip,
+        [SENSOR_PORT]: port,
+    };
+    Object.keys(newInformation).forEach((key) => {
+        data[key] = newInformation[key];
+    });
+    return await axios.put(UPDATE_SENSOR_PATH, data, { headers: headers });
 }
 
-export { getAllSensors, shutDownSensorApi, updateSensorApi };
+async function updateSensorName(token: string, ip: string, port: number, newName: string) {
+    return await updateSensorApi(token, ip, String(port), { action: UPDATE_NAME_ACTION, [SENSOR_NAME]: newName });
+}
+
+export { getAllSensors, shutDownSensorApi, updateSensorName };
