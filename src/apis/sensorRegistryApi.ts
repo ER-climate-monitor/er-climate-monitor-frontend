@@ -1,5 +1,14 @@
 import { config } from '@/config/config';
-import { SENSOR_IP, SENSOR_NAME, SENSOR_PORT, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
+import {
+    SENSOR_CRONJOB_DAYS,
+    SENSOR_CRONJOB_TIME_HOUR,
+    SENSOR_CRONJOB_TIME_MINUTE,
+    SENSOR_IP,
+    SENSOR_NAME,
+    SENSOR_PORT,
+    UPDATE_CRONJOB_DAYS,
+    UPDATE_NAME_ACTION,
+} from '@/headers/sensorHeaders';
 import { USER_TOKEN_HEADER } from '@/headers/userHeaders';
 import axios from 'axios';
 
@@ -46,4 +55,23 @@ async function updateSensorName(token: string, ip: string, port: number, newName
     return await updateSensorApi(token, ip, String(port), { action: UPDATE_NAME_ACTION, [SENSOR_NAME]: newName });
 }
 
-export { getAllSensors, shutDownSensorApi, updateSensorName, checkSensorDays };
+async function updateSensorCronJobDays(token: string, ip: string, port: number, days: string) {
+    return await updateSensorApi(token, ip, String(port), { action: UPDATE_CRONJOB_DAYS, [SENSOR_CRONJOB_DAYS]: days });
+}
+
+async function updateSensorCronJobTime(token: string, ip: string, port: number, hour: string, minute: string) {
+    return await updateSensorApi(token, ip, String(port), {
+        action: UPDATE_CRONJOB_DAYS,
+        [SENSOR_CRONJOB_TIME_HOUR]: hour,
+        [SENSOR_CRONJOB_TIME_MINUTE]: minute,
+    });
+}
+
+export {
+    getAllSensors,
+    shutDownSensorApi,
+    updateSensorName,
+    checkSensorDays,
+    updateSensorCronJobDays,
+    updateSensorCronJobTime,
+};
