@@ -26,11 +26,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import SensorSettingsModal from '@/components/modal/SensorSettingsModal.vue';
-import { shutDownSensorApi } from '@/apis/sensorRegistryApi';
+import { shutDownSensorApi, updateSensorName } from '@/apis/sensorRegistryApi';
 import { getToken } from '@/utils/manageToken';
 import { HttpStatusCode } from 'axios';
 import { defineEmits } from 'vue';
-import { UPDATE_CRONJOB_DAYS, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
+import { UPDATE_CRONJOB_DAYS, UPDATE_CRONJOB_TIME, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
 
 const emit = defineEmits(['removeSensor']);
 
@@ -48,14 +48,22 @@ const toggleModal = () => {
     isModalVisible.value = !isModalVisible.value;
 };
 
-const saveSettings = (newSettings: { [key: string]: string }) => {
+const saveSettings = async (newSettings: { [key: string]: string }) => {
     const action = newSettings.action;
+    const token = getToken();
     switch (action) {
         case UPDATE_NAME_ACTION: {
-            console.log(newSettings.name);
+            const response = await updateSensorName(token, props.ip, props.port, newSettings.name);
+            if (response.status !== HttpStatusCode.Ok) {
+                alert('Error');
+            } else {
+                location.reload();
+            }
         }
         case UPDATE_CRONJOB_DAYS: {
             console.log(newSettings.days);
+        }
+        case UPDATE_CRONJOB_TIME: {
         }
     }
 };
