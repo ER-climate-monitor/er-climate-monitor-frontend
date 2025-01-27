@@ -3,13 +3,29 @@
 </template>
 
 <script setup lang="ts">
+import { fetchSensorDetections } from '@/services/api';
+import type { SensorLocation } from '@/types/SensorLocation';
 import leaflet from 'leaflet';
 import { onMounted, watch } from 'vue';
 import type { PropType } from 'vue';
+import {
+  CategoryScale,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  Chart,
+} from 'chart.js';
 
-const { locations } = defineProps({
+Chart.register(CategoryScale, LineController, LineElement, PointElement, LinearScale, Title);
+const { sensorType, locations } = defineProps({
+  sensorType: {
+    type: String,
+    required: true,
+  },
   locations: {
-    type: Array as PropType<{ latitude: number; longitude: number }[]>,
+    type: Array as PropType<SensorLocation[]>,
     required: true,
   },
 });
@@ -44,12 +60,66 @@ onMounted(() => {
         .addTo(map);
     });
 });
-const addMarkers = (locations: { latitude: number; longitude: number }[]) => {
+
+const formatDate = (timestamp: string) => {
+  const date = new Date(timestamp);
+  return date.toLocaleString();
+};
+
+async function markerOnClick(sensorId: string, e: { latlng: leaflet.LatLngExpression }) {
+  const detections = await fetchSensorDetections(sensorType, sensorId);
+
+  if (!detections || detections.length === 0) {
+    leaflet.popup().setLatLng(e.latlng).setContent('No detections available').openOn(map);
+    return;
+  }
+
+  const labels = detections.map((d) => formatDate(d.timestamp));
+  const values = detections.map((d) => d.value);
+
+  const canvas = document.createElement('canvas');
+  leaflet.popup().setLatLng(e.latlng).setContent(canvas).openOn(map);
+
+  new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Detection Values',
+          data: values,
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        x: {
+          type: 'category',
+          title: {
+            display: true,
+            text: 'Timestamp',
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Value',
+          },
+        },
+      },
+    },
+  });
+}
+
+const addMarkers = (locations: SensorLocation[]) => {
   locations.forEach((location) => {
-    leaflet
-      .marker([location.latitude, location.longitude])
-      .addTo(map)
-      .bindPopup(`Latitude: ${location.latitude}, Longitude: ${location.longitude}`);
+    const marker = leaflet.marker([location.latitude, location.longitude]);
+
+    marker.on('click', (e) => markerOnClick(location._id, e));
+    map.addLayer(marker);
   });
 };
 
