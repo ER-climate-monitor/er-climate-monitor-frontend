@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-md rounded-lg p-4 mb-4 flex justify-between items-center">
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full justify-between items-center">
         <div class="space-y-2">
             <label class="block text-gray-700 font-medium">IP: {{ ip }}</label>
             <label class="block text-gray-700 font-medium">Name: {{ name }}</label>
