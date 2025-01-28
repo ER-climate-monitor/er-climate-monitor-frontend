@@ -44,7 +44,9 @@
             <div class="mb-6">
                 <h4 class="text-lg font-medium text-gray-900 mb-2">Cronjob Time</h4>
                 <div class="flex space-x-4">
+                    <label class="text-lg font-small text-gray-900" for="input-working-hours"> Hours: </label>
                     <input
+                        id="input-working-hours"
                         v-model.number="localWorkingHours.hours"
                         type="number"
                         class="w-1/2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
@@ -52,7 +54,9 @@
                         min="0"
                         placeholder="Hours"
                     />
+                    <label class="text-lg font-small text-gray-900" for="input-working-minutes"> Minutes: </label>
                     <input
+                        id="input-working-minutes"
                         v-model.number="localWorkingHours.minutes"
                         type="number"
                         max="59"
