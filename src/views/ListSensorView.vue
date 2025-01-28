@@ -1,7 +1,8 @@
 <template>
     <div class="w-[1000px]">
-        <div id="search-engine" class="pb-10">
-            <label class="text-lg font-small text-gray-900" for="input-name"> Search: </label>
+        <div id="search-engine" class="pb-10 sticky top-0 bg-orange-100 rounded p-2 mb-5">
+            <h2 class="text-gray-900 text-center font-bold">Search a Sensor</h2>
+            <label class="text-lg font-small text-gray-900" for="input-name"> Type a value: </label>
             <input
                 id="input-name"
                 type="text"
@@ -9,7 +10,7 @@
                 placeholder="Search a sensor"
                 class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             />
-            <div id="radio-filters" class="bg-white rounded-md">
+            <div id="radio-filters" class="bg-white rounded-md mt-2">
                 <h3 class="font-bold text-gray-900 text-center">Filters:</h3>
                 <ul class="list-none mt-2">
                     <li v-for="filter in filters" :key="filter" class="mb-2 flex items-center gap-2 cursor-pointer">
