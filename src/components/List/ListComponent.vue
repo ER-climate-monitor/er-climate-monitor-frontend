@@ -104,6 +104,7 @@ const shutDownSensor = async () => {
     const response = await shutDownSensorApi(getToken(), props.ip, props.port);
     if (response.status === HttpStatusCode.Ok) {
         emit('removeSensor', { ip: props.ip, port: props.port });
+        location.reload();
     }
 };
 </script>
