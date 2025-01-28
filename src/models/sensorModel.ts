@@ -1,15 +1,15 @@
 interface Sensor {
     ip: string;
     name: string;
-    port: number;
+    port: string;
 }
 
 class BasicSensor implements Sensor {
     ip: string;
     name: string;
-    port: number;
+    port: string;
 
-    constructor(ip: string, port: number, name: string = 'unknown') {
+    constructor(ip: string, port: string, name: string = 'unknown') {
         this.ip = ip;
         this.port = port;
         this.name = name;

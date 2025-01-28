@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { config } from '@/config/config';
 import {
-    API_KEY_HEADER,
     LOGIN_ACTION,
     REGISTER_ACTION,
     USER_ACTION,
     USER_EMAIL_HEADER,
     USER_PASSWORD_HEADER,
+    USER_APIKEY_HEADER,
 } from '@/headers/userHeaders';
 
 const REGISTER_PATH = config.apiBaseUrl + '/authentication/user/register';
@@ -42,7 +42,7 @@ async function loginAdmin(email: string, password: string, apiKey: string) {
         },
         {
             headers: {
-                [API_KEY_HEADER]: apiKey,
+                [USER_APIKEY_HEADER]: apiKey,
             },
         },
     );
