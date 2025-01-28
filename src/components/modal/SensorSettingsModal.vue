@@ -1,6 +1,6 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <div class="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
             <!-- Modal Title -->
             <h3 class="text-xl font-semibold text-gray-900 mb-4">Sensor Settings</h3>
 
