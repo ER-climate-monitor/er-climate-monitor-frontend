@@ -52,7 +52,7 @@ const emit = defineEmits(['removeSensor']);
 const props = defineProps({
     ip: { type: String, default: '' },
     name: { type: String, default: '' },
-    port: { type: Number, default: 0 },
+    port: { type: String, default: '' },
 });
 
 const isModalVisible = ref(false);
