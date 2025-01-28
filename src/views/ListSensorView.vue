@@ -25,7 +25,7 @@
                             name="search-group"
                             class="cursor-pointer"
                         />
-                        <label :for="'radio-button-' + filter" class="text-gray-800 cursor-pointer">
+                        <label :for="'radio-button-' + filter" class="text-gray-800 cursor-pointer font-bold">
                             {{ filter }}
                         </label>
                     </li>
@@ -57,7 +57,7 @@ const sensors: Ref<Array<Sensor>> = ref([]);
 const displayedSensor: Ref<Array<Sensor>> = ref([]);
 const searchQuery = ref('');
 const filters = ['ip', 'port', 'name'];
-const selectedFilter = filters[0];
+const selectedFilter = ref(filters[0]);
 
 onMounted(async () => {
     const token = getToken();
@@ -75,27 +75,24 @@ const removeSensorFromList = (sensorToRemove: { ip: string; port: string }) => {
 };
 
 const filterSensors = () => {
-    switch (selectedFilter.toLowerCase()) {
-        case 'ip': {
-            return sensors.value.filter((sensor) => sensor.ip.includes(searchQuery.value, 0));
-        }
-        case 'port': {
-            return sensors.value.filter((sensor) => sensor.port.includes(searchQuery.value, 0));
-        }
-        case 'name': {
-            return sensors.value.filter((sensor) => sensor.name.includes(searchQuery.value, 0));
-        }
-        default: {
-            return [];
-        }
+    const filterKey: string = selectedFilter.value.toLowerCase();
+    const query = searchQuery.value;
+
+    if (!query) {
+        return sensors.value;
     }
+
+    const filterMap: { [key: string]: (v: Sensor) => boolean } = {
+        ip: (sensor: Sensor) => sensor.ip.includes(query),
+        port: (sensor: Sensor) => sensor.port.includes(query),
+        name: (sensor: Sensor) => sensor.name.includes(query),
+    };
+
+    const filterFunction = filterMap[filterKey] || (() => []);
+    return sensors.value.filter(filterFunction);
 };
 
 watch(searchQuery, () => {
-    if (searchQuery.value === '') {
-        displayedSensor.value = sensors.value;
-        return;
-    }
     displayedSensor.value = filterSensors();
 });
 </script>
