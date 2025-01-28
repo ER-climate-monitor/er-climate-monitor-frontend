@@ -1,5 +1,5 @@
 <template>
-    <div class="sensor-list">
+    <div id="sensor list" class="sensor-list">
         <ul>
             <li v-for="sensor in sensors" :key="sensor.ip">
                 <SensorItem
