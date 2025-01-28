@@ -5,12 +5,16 @@ const API_VERSION = import.meta.env.API_VERSION || 'v0';
 const config = {
     apiBaseUrl: `http://${API_HOST}:${API_PORT}/${API_VERSION}/api`,
     apiAlertTopics: '/sensor/all',
-    apiSubscribeToTopic: '/alert/subscription',
-    apiWebSocketRooms: {
-        CONNECTION: 'connect',
-        DISCONNECTION: 'disconnect',
-        REGISTRATION: 'register',
-        REGISTRATION_OUTCOME: 'registered',
+    subscriptionsApi: {
+        subscribeToTopic: '/alert/subscriptions',
+        unsubscribeToTopic: 'alert/subscriptions',
+        getUserAlerts: '/alert',
+        apiWebSocketRooms: {
+            CONNECTION: 'connect',
+            DISCONNECTION: 'disconnect',
+            REGISTRATION: 'register',
+            REGISTRATION_OUTCOME: 'registered',
+        },
     },
 };
 

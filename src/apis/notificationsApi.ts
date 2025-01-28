@@ -20,7 +20,7 @@ async function subscribeToTopic(topic: Topic): Promise<NotificationSubscription 
     try {
         const res = await httpRequest<Topic, { uid: string; topicAddr: string }>(
             'POST',
-            `${config.apiBaseUrl}${config.apiSubscribeToTopic}`,
+            `${config.apiBaseUrl}${config.subscriptionsApi.subscribeToTopic}`,
             topic,
         );
         if (!res) {
@@ -36,22 +36,25 @@ async function subscribeToTopic(topic: Topic): Promise<NotificationSubscription 
 function establishSubscription<M>(uid: string, topicAddr: string, messageConsumer: (_: M) => void) {
     const scoket = io(`http://${API_HOST}:${API_PORT}`, { transports: ['websocket'] });
 
-    scoket.on(config.apiWebSocketRooms.CONNECTION, () => {
+    scoket.on(config.subscriptionsApi.apiWebSocketRooms.CONNECTION, () => {
         Logger.info('Client successfully connected to socket for topic: ', topicAddr);
-        scoket.emit(config.apiWebSocketRooms.REGISTRATION, uid, topicAddr);
+        scoket.emit(config.subscriptionsApi.apiWebSocketRooms.REGISTRATION, uid, topicAddr);
     });
 
-    scoket.on(config.apiWebSocketRooms.DISCONNECTION, () => {
+    scoket.on(config.subscriptionsApi.apiWebSocketRooms.DISCONNECTION, () => {
         Logger.info('Client websocket disconnected to topic: ', topicAddr);
     });
 
-    scoket.on(config.apiWebSocketRooms.REGISTRATION_OUTCOME, (result: { success: boolean; error?: string }) => {
-        if (result.success) {
-            Logger.info('Client successfully subscribed for topic ', topicAddr);
-        } else {
-            Logger.error('Registration failed: ', result.error);
-        }
-    });
+    scoket.on(
+        config.subscriptionsApi.apiWebSocketRooms.REGISTRATION_OUTCOME,
+        (result: { success: boolean; error?: string }) => {
+            if (result.success) {
+                Logger.info('Client successfully subscribed for topic ', topicAddr);
+            } else {
+                Logger.error('Registration failed: ', result.error);
+            }
+        },
+    );
 
     scoket.on(topicAddr, (message: M) => {
         Logger.info(`New incoming message for topic ${topicAddr} => `, JSON.stringify(message));
