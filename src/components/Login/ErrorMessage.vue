@@ -1,20 +1,20 @@
 <template>
-  <p v-if="message" class="error">{{ message }}</p>
+    <p v-if="message" class="error">{{ message }}</p>
 </template>
 
 <script setup lang="ts">
 defineProps({
-  message: {
-    type: String,
-    default: '',
-  },
+    message: {
+        type: String,
+        default: '',
+    },
 });
 </script>
 
 <style scoped>
 .error {
-  color: red;
-  font-size: 1rem;
-  margin-top: 20px;
+    color: red;
+    font-size: 1rem;
+    margin-top: 20px;
 }
 </style>

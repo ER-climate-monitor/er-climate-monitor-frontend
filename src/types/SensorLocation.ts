@@ -1,5 +1,5 @@
 export interface SensorLocation {
-  _id: string;
-  latitude: number;
-  longitude: number;
+    _id: string;
+    latitude: number;
+    longitude: number;
 }

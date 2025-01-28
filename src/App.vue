@@ -3,5 +3,5 @@ import './assets/tailwind.css';
 </script>
 
 <template>
-  <RouterView />
+    <RouterView />
 </template>
