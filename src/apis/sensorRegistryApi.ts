@@ -7,6 +7,7 @@ import {
     SENSOR_NAME,
     SENSOR_PORT,
     UPDATE_CRONJOB_DAYS,
+    UPDATE_CRONJOB_TIME,
     UPDATE_NAME_ACTION,
 } from '@/headers/sensorHeaders';
 import { USER_TOKEN_HEADER } from '@/headers/userHeaders';
@@ -23,6 +24,10 @@ function checkSensorDays(days: string) {
     }
     const splitted_days = days.split('-');
     return splitted_days[0] <= splitted_days[1];
+}
+
+function checkTime(hours: number, minutes: number) {
+    return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
 }
 
 async function getAllSensors(token: string) {
@@ -61,7 +66,7 @@ async function updateSensorCronJobDays(token: string, ip: string, port: number, 
 
 async function updateSensorCronJobTime(token: string, ip: string, port: number, hour: string, minute: string) {
     return await updateSensorApi(token, ip, String(port), {
-        action: UPDATE_CRONJOB_DAYS,
+        action: UPDATE_CRONJOB_TIME,
         [SENSOR_CRONJOB_TIME_HOUR]: hour,
         [SENSOR_CRONJOB_TIME_MINUTE]: minute,
     });
@@ -74,4 +79,5 @@ export {
     checkSensorDays,
     updateSensorCronJobDays,
     updateSensorCronJobTime,
+    checkTime,
 };
