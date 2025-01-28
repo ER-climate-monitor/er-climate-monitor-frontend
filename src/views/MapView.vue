@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen p-4">
-    <SensorTypeSelect :sensorTypes="sensorTypes" v-model="selectedSensorType" />
-    <div v-if="isLoading">Loading locations...</div>
-    <div v-else-if="sensorLocations.length === 0">
-      <p>No locations found for the selected sensor type.</p>
+    <div class="flex flex-col items-center justify-center min-h-screen p-4">
+        <SensorTypeSelect :sensorTypes="sensorTypes" v-model="selectedSensorType" />
+        <div v-if="isLoading">Loading locations...</div>
+        <div v-else-if="sensorLocations.length === 0">
+            <p>No locations found for the selected sensor type.</p>
+        </div>
+        <MapComponent :sensorType="selectedSensorType" :locations="sensorLocations" />
     </div>
-    <MapComponent :sensorType="selectedSensorType" :locations="sensorLocations" />
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -22,16 +22,16 @@ const selectedSensorType = ref<string>('');
 const sensorLocations = ref<SensorLocation[]>([]);
 
 const updateSensorLocations = async () => {
-  isLoading.value = true;
-  try {
-    const locations = await fetchSensorLocations(selectedSensorType.value);
-    sensorLocations.value = locations;
-  } catch (error) {
-    console.error('Error fetching sensor locations:', error);
-    sensorLocations.value = [];
-  } finally {
-    isLoading.value = false;
-  }
+    isLoading.value = true;
+    try {
+        const locations = await fetchSensorLocations(selectedSensorType.value);
+        sensorLocations.value = locations;
+    } catch (error) {
+        console.error('Error fetching sensor locations:', error);
+        sensorLocations.value = [];
+    } finally {
+        isLoading.value = false;
+    }
 };
 
 watch(selectedSensorType, updateSensorLocations);
