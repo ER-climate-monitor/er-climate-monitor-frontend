@@ -10,7 +10,9 @@
             <!-- Name Section -->
             <div class="mb-6">
                 <h4 class="text-lg font-medium text-gray-900 mb-2">Change Sensor Name</h4>
+                <label class="text-lg font-small text-gray-900" for="input-name"> Name: </label>
                 <input
+                    id="input-name"
                     v-model="localName"
                     type="text"
                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
@@ -26,17 +28,19 @@
             <!-- Days Section -->
             <div class="mb-6">
                 <h4 class="text-lg font-medium text-gray-900 mb-2">Cronjob days [format: dd-dd]</h4>
+                <label class="text-lg font-small text-gray-900" for="input-working-days"> Days: </label>
                 <input
+                    id="input-working-days"
                     v-model="newDay"
                     type="text"
                     placeholder="Add a day"
                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 />
                 <button
-                    @click="addDay"
+                    @click="changeDays"
                     class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                    Add Day
+                    Change Days
                 </button>
             </div>
 
@@ -65,14 +69,20 @@
                         placeholder="Minutes"
                     />
                 </div>
+                <button
+                    @click="changeTime"
+                    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    Change Time
+                </button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { checkSensorDays } from '@/apis/sensorRegistryApi';
-import { UPDATE_CRONJOB_DAYS, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
+import { checkSensorDays, checkTime } from '@/apis/sensorRegistryApi';
+import { UPDATE_CRONJOB_DAYS, UPDATE_CRONJOB_TIME, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
 import { ref, reactive } from 'vue';
 import '@/assets/tailwind.css';
 
@@ -109,11 +119,17 @@ const prepareUpdateDays = (days: string) => {
     message.days = days;
 };
 
+const prepareUpdateTime = (hours: number, minutes: number) => {
+    updateAction(UPDATE_CRONJOB_TIME);
+    message.hour = String(hours);
+    message.minute = String(minutes);
+};
+
 const close = () => {
     emit('close');
 };
 
-const addDay = () => {
+const changeDays = () => {
     if (newDay.value.trim() && checkSensorDays(newDay.value)) {
         prepareUpdateDays(newDay.value);
         emit('save', message);
@@ -126,6 +142,14 @@ const addDay = () => {
 const changeName = async () => {
     if (localName.value.trim()) {
         prepareUpdateName(localName.value);
+        emit('save', message);
+        close();
+    }
+};
+
+const changeTime = async () => {
+    if (checkTime(localWorkingHours.hours, localWorkingHours.minutes)) {
+        prepareUpdateTime(localWorkingHours.hours, localWorkingHours.minutes);
         emit('save', message);
         close();
     }
