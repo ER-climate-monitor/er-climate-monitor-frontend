@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="w-[1000px]">
         <div id="search-engine" class="pb-10">
             <label class="text-lg font-small text-gray-900" for="input-name"> Search: </label>
             <input
@@ -32,7 +32,7 @@
                 </ul>
             </div>
         </div>
-        <div id="sensor list" class="sensor-list">
+        <div id="sensor list" class="sensor-list w-100">
             <ul class="overflow-auto">
                 <li v-for="sensor in displayedSensor" :key="sensor.ip">
                     <SensorItem
@@ -75,7 +75,7 @@ const removeSensorFromList = (sensorToRemove: { ip: string; port: string }) => {
 };
 
 const filterSensors = () => {
-    switch (selectedFilter) {
+    switch (selectedFilter.toLowerCase()) {
         case 'ip': {
             return sensors.value.filter((sensor) => sensor.ip.includes(searchQuery.value, 0));
         }
