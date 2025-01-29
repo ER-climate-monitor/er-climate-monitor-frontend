@@ -97,7 +97,7 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
 };
 
 const shutDownSensor = async () => {
-    if (confirm(`Do you really want to remove and turning off the sensor ${props.ip}:${props.port}`)) {
+    if (confirm(`Do you really want to remove and turning off the sensor IP:${props.ip} PORT:${props.port}`)) {
         const response = await shutDownSensorApi(getToken(), props.ip, props.port);
         if (response.status === HttpStatusCode.Ok) {
             emit('removeSensor', { ip: props.ip, port: props.port });

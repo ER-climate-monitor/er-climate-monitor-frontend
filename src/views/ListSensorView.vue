@@ -1,14 +1,17 @@
 <template>
-    <div class="w-[1000px]">
-        <div id="search-engine" class="pb-10 sticky top-0 bg-third rounded p-2 mb-5 mt-2">
+    <div class="w-full max-w-3xl mx-auto">
+        <div
+            id="search-engine"
+            class="pb-10 sticky top-0 border-4 border-dashed border-secondary bg-white rounded p-2 mb-5 mt-2"
+        >
             <h2 class="text-gray-900 text-center font-bold">Search a Sensor</h2>
-            <label class="text-lg font-small text-gray-900" for="input-name"> Type a value: </label>
+            <label class="text-lg font-medium text-gray-900" for="input-name"> Type a value: </label>
             <input
                 id="input-name"
                 type="text"
                 v-model="searchQuery"
                 placeholder="Search a sensor"
-                class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                class="w-full p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             />
             <div id="radio-filters" class="bg-white rounded-md mt-2">
                 <h3 class="font-bold text-gray-900 text-center">Filters:</h3>
@@ -24,7 +27,7 @@
                             :value="filter"
                             v-model="selectedFilter"
                             name="search-group"
-                            class="cursor-pointer"
+                            class="cursor-pointer font-medium"
                         />
                         <label :for="'radio-button-' + filter" class="text-gray-800 cursor-pointer font-bold">
                             {{ filter }}
