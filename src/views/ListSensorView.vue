@@ -1,6 +1,6 @@
 <template>
     <div class="w-[1000px]">
-        <div id="search-engine" class="pb-10 sticky top-0 bg-orange-100 rounded p-2 mb-5">
+        <div id="search-engine" class="pb-10 sticky top-0 bg-third rounded p-2 mb-5 mt-2">
             <h2 class="text-gray-900 text-center font-bold">Search a Sensor</h2>
             <label class="text-lg font-small text-gray-900" for="input-name"> Type a value: </label>
             <input

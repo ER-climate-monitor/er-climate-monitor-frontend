@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full justify-between items-center">
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full justify-between items-center hover:bg-gray-200">
         <div class="space-y-2">
             <label class="block text-gray-700 font-medium">IP: {{ ip }}</label>
             <label class="block text-gray-700 font-medium">Name: {{ name }}</label>
@@ -9,13 +9,13 @@
         <div class="flex space-x-2">
             <button
                 @click="shutDownSensor"
-                class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                class="bg-secondary text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
             >
                 Shut Down
             </button>
             <button
                 @click="toggleModal"
-                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
                 Settings
             </button>
