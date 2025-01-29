@@ -85,18 +85,3 @@ const goToLogin = (e: Event) => {
     router.push('/login');
 };
 </script>
-
-<style scoped>
-.register-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-</style>
