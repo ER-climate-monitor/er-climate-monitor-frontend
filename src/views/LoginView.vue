@@ -51,7 +51,7 @@
 
             <button
                 type="submit"
-                class="w-full bg-primary text-black py-2 rounded-lg font-bold hover:bg-blue-700 transition duration-300"
+                class="w-full bg-primary text-black py-2 rounded-lg font-bold hover:bg-blue-400 transition duration-300"
             >
                 Login
             </button>

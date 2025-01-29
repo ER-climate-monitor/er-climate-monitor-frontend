@@ -1,32 +1,32 @@
 <template>
-    <div class="register-container">
+    <div class="register-container flex items-center justify-center min-h-screen">
         <form @submit.prevent="handleRegister" class="w-full max-w-md bg-white rounded-lg shadow-lg p-6 space-y-6">
             <h1 class="text-2xl font-bold text-gray-800 text-center">Register</h1>
             <div class="space-y-2">
-                <label for="email" class="block text-sm font-medium text-gray-600"> Email </label>
+                <label for="email" class="block text-sm font-bold text-gray-900"> Email </label>
                 <input
                     type="text"
                     id="email"
                     v-model="email"
                     placeholder="Enter your email"
-                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
+                    class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
                     required
                 />
             </div>
             <div class="space-y-2">
-                <label for="password" class="block text-sm font-medium text-gray-600"> Password </label>
+                <label for="password" class="block text-sm font-bold text-gray-900"> Password </label>
                 <input
                     type="password"
                     id="password"
                     v-model="password"
                     placeholder="Enter your password"
-                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
+                    class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
                     required
                 />
             </div>
             <button
                 type="submit"
-                class="w-full bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700 transition duration-300"
+                class="w-full bg-primary text-black py-2 rounded-lg font-bold hover:bg-blue-400 transition duration-300"
             >
                 Register
             </button>
