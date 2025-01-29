@@ -58,6 +58,8 @@ import { getAllSensors } from '@/apis/sensorRegistryApi';
 import { ref, onMounted, watch, type Ref } from 'vue';
 import { getToken } from '@/utils/manageToken';
 import { BasicSensor, type Sensor } from '@/models/sensorModel';
+import { AxiosError, HttpStatusCode } from 'axios';
+import router from '@/router';
 const sensors: Ref<Array<Sensor>> = ref([]);
 const displayedSensor: Ref<Array<Sensor>> = ref([]);
 const searchQuery = ref('');
@@ -66,11 +68,17 @@ const selectedFilter = ref(filters[0]);
 
 onMounted(async () => {
     const token = getToken();
-    const response = await getAllSensors(token);
-    response.data.sensors.forEach((element: Sensor) => {
-        sensors.value.push(new BasicSensor(element.ip, String(element.port), element.name || 'unknown'));
-        displayedSensor.value.push(new BasicSensor(element.ip, String(element.port), element.name || 'unknown'));
-    });
+    try {
+        const response = await getAllSensors(token);
+        response.data.sensors.forEach((element: Sensor) => {
+            sensors.value.push(new BasicSensor(element.ip, String(element.port), element.name || 'unknown'));
+            displayedSensor.value.push(new BasicSensor(element.ip, String(element.port), element.name || 'unknown'));
+        });
+    } catch (error) {
+        if (error instanceof AxiosError && error.status === HttpStatusCode.Unauthorized) {
+            router.push('/login');
+        }
+    }
 });
 
 const removeSensorFromList = (sensorToRemove: { ip: string; port: string }) => {
