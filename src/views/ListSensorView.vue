@@ -41,6 +41,7 @@
                         :port="sensor.port"
                         :name="sensor.name"
                         @removeSensor="removeSensorFromList"
+                        @updateSensorName="updateSensorName"
                     />
                 </li>
             </ul>
@@ -70,9 +71,15 @@ onMounted(async () => {
 });
 
 const removeSensorFromList = (sensorToRemove: { ip: string; port: string }) => {
-    sensors.value = sensors.value.filter(
+    displayedSensor.value = displayedSensor.value.filter(
         (sensor) => sensor.ip !== sensorToRemove.ip || sensor.port !== sensorToRemove.port,
     );
+};
+
+const updateSensorName = (sensorInfo: { ip: string; port: string; name: string }) => {
+    displayedSensor.value
+        .filter((sensor) => sensor.ip === sensorInfo.ip && sensor.port === sensorInfo.port)
+        .forEach((sensor) => (sensor.name = sensorInfo.name));
 };
 
 const filterSensors = () => {

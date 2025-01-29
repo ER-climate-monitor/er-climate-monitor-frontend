@@ -47,7 +47,7 @@ import { defineEmits } from 'vue';
 import '@/assets/tailwind.css';
 import { UPDATE_CRONJOB_DAYS, UPDATE_CRONJOB_TIME, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
 
-const emit = defineEmits(['removeSensor']);
+const emit = defineEmits(['removeSensor', 'updateSensorName']);
 
 const props = defineProps({
     ip: { type: String, default: '' },
@@ -72,15 +72,13 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
             if (response.status !== HttpStatusCode.Ok) {
                 alert('Error');
             } else {
-                location.reload();
+                emit('updateSensorName', { ip: props.ip, port: props.port, name: newSettings.name });
             }
         }
         case UPDATE_CRONJOB_DAYS: {
             const response = await updateSensorCronJobDays(token, props.ip, props.port, newSettings.days);
             if (response.status !== HttpStatusCode.Ok) {
                 alert('Error');
-            } else {
-                location.reload();
             }
         }
         case UPDATE_CRONJOB_TIME: {
@@ -93,8 +91,6 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
             );
             if (response.status !== HttpStatusCode.Ok) {
                 alert('Error');
-            } else {
-                location.reload();
             }
         }
     }
@@ -104,7 +100,6 @@ const shutDownSensor = async () => {
     const response = await shutDownSensorApi(getToken(), props.ip, props.port);
     if (response.status === HttpStatusCode.Ok) {
         emit('removeSensor', { ip: props.ip, port: props.port });
-        location.reload();
     }
 };
 </script>
