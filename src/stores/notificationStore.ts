@@ -1,4 +1,6 @@
 import { useLocalStorage } from '@vueuse/core';
+import { fetchAlertNotification, restoreSubscriptions } from '@/apis/notificationsApi';
+import { onMounted, ref } from 'vue';
 
 export type SensorInfos = {
     name: string;
@@ -12,9 +14,6 @@ export type Topic = {
     query?: string;
 };
 
-/**
- * TODO: remember to generate id in notification service
- */
 export type Notification = {
     id: string;
     sensorName: string;
@@ -41,13 +40,39 @@ export const getAlertIcon = (alertType: string): string => {
 
 export const useNotificationState = () => {
     const notifications = useLocalStorage<Notification[]>('notifications', []);
+    const isLoading = ref(false);
+    const error = ref<string | null>(null);
+    const isInitialised = ref(false);
 
     const prependNotification = (n: Notification) => {
         notifications.value.unshift(n);
     };
 
+    const loadNotifications = async () => {
+        if (isInitialised.value) return;
+
+        isLoading.value = true;
+        error.value = null;
+
+        try {
+            notifications.value = await fetchAlertNotification();
+            isInitialised.value = true;
+        } catch (err) {
+            error.value = err instanceof Error ? err.message : 'Failed to load notifications...';
+        } finally {
+            isLoading.value = false;
+        }
+    };
+
+    onMounted(async () => {
+        // TODO: see where it should be better to initialise notiications (now on first store usage)
+        await loadNotifications();
+        await restoreSubscriptions();
+    });
+
     return {
         notifications,
         prependNotification,
+        loadNotifications,
     };
 };

@@ -7,7 +7,8 @@ const config = {
     apiAlertTopics: '/sensor/all',
     subscriptionsApi: {
         subscribeToTopic: '/alert/subscriptions',
-        unsubscribeToTopic: 'alert/subscriptions',
+        unsubscribeToTopic: '/alert/subscriptions',
+        restoreSubscriptions: '/alert/subscriptions/restore',
         getUserAlerts: '/alert',
         apiWebSocketRooms: {
             CONNECTION: 'connect',

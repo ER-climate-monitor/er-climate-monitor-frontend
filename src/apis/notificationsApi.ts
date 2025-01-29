@@ -1,11 +1,33 @@
 import { API_HOST, API_PORT, config } from '@/config/config';
-import type { NotificationSubscription, SensorInfos, Topic } from '@/stores/notificationStore';
+import {
+    useNotificationState,
+    type Notification,
+    type NotificationSubscription,
+    type SensorInfos,
+    type Topic,
+} from '@/stores/notificationStore';
 import { getToken } from '@/utils/manageToken';
 import axios, { HttpStatusCode } from 'axios';
 import { io } from 'socket.io-client';
 import Logger from 'js-logger';
 
 Logger.useDefaults();
+
+const { prependNotification } = useNotificationState();
+
+async function fetchAlertNotification(): Promise<Notification[]> {
+    try {
+        return (
+            (await httpRequest<null, Notification[]>(
+                'GET',
+                `${config.apiBaseUrl}${config.subscriptionsApi.getUserAlerts}`,
+            )) || []
+        );
+    } catch (error) {
+        Logger.error((error as Error).message);
+        return [];
+    }
+}
 
 async function fetchNotificationTopics(): Promise<SensorInfos[]> {
     try {
@@ -30,6 +52,19 @@ async function subscribeToTopic(topic: Topic): Promise<NotificationSubscription 
     } catch (error) {
         Logger.error('An error occurred: ', (error as Error).message);
         return null;
+    }
+}
+
+async function restoreSubscriptions() {
+    try {
+        const res = await httpRequest<null, { uid: string; topicAddr: string }[]>(
+            'GET',
+            `${config.apiBaseUrl}${config.subscriptionsApi.restoreSubscriptions}`,
+        );
+
+        res?.forEach((subInfo) => establishSubscription(subInfo.uid, subInfo.topicAddr, prependNotification));
+    } catch (error) {
+        Logger.error('An error occurred: ', (error as Error).message);
     }
 }
 
@@ -87,7 +122,14 @@ async function httpRequest<B, X>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url:
 }
 
 function retrieveUserToken(): string {
+    // return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Nzk1MmUwNzYxOTMyOWU5NTE1ZTgyZjUiLCJ1c2VyRW1haWwiOiJwaXNjaW9AZ21haWwuY29tIiwidXNlclJvbGUiOiJub3JtYWwiLCJpYXQiOjE3MzgxNDM1ODUsImV4cCI6MTczODE0NzE4NX0.m7iyb4ATmFDw4RMZuJQrCIuFWqpgERYoItC_n1BKqoI';
     return getToken();
 }
 
-export { fetchNotificationTopics, subscribeToTopic, establishSubscription };
+export {
+    fetchAlertNotification,
+    fetchNotificationTopics,
+    subscribeToTopic,
+    establishSubscription,
+    restoreSubscriptions,
+};
