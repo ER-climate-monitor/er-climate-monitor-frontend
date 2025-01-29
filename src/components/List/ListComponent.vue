@@ -46,6 +46,7 @@ import { HttpStatusCode } from 'axios';
 import { defineEmits } from 'vue';
 import '@/assets/tailwind.css';
 import { UPDATE_CRONJOB_DAYS, UPDATE_CRONJOB_TIME, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
+import router from '@/router';
 
 const emit = defineEmits(['removeSensor', 'updateSensorName']);
 
@@ -69,16 +70,16 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
     switch (action) {
         case UPDATE_NAME_ACTION: {
             const response = await updateSensorName(token, props.ip, props.port, newSettings.name);
-            if (response.status !== HttpStatusCode.Ok) {
-                alert('Error');
+            if (response.status === HttpStatusCode.Unauthorized) {
+                router.push('/login');
             } else {
                 emit('updateSensorName', { ip: props.ip, port: props.port, name: newSettings.name });
             }
         }
         case UPDATE_CRONJOB_DAYS: {
             const response = await updateSensorCronJobDays(token, props.ip, props.port, newSettings.days);
-            if (response.status !== HttpStatusCode.Ok) {
-                alert('Error');
+            if (response.status === HttpStatusCode.Unauthorized) {
+                router.push('/login');
             }
         }
         case UPDATE_CRONJOB_TIME: {
@@ -89,8 +90,8 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
                 newSettings.hour,
                 newSettings.minute,
             );
-            if (response.status !== HttpStatusCode.Ok) {
-                alert('Error');
+            if (response.status !== HttpStatusCode.Unauthorized) {
+                router.push('/login');
             }
         }
     }
