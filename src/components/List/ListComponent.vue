@@ -75,12 +75,14 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
             } else {
                 emit('updateSensorName', { ip: props.ip, port: props.port, name: newSettings.name });
             }
+            return;
         }
         case UPDATE_CRONJOB_DAYS: {
             const response = await updateSensorCronJobDays(token, props.ip, props.port, newSettings.days);
             if (response.status === HttpStatusCode.Unauthorized) {
                 router.push('/login');
             }
+            return;
         }
         case UPDATE_CRONJOB_TIME: {
             const response = await updateSensorCronJobTime(
@@ -93,6 +95,7 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
             if (response.status !== HttpStatusCode.Unauthorized) {
                 router.push('/login');
             }
+            return;
         }
     }
 };
