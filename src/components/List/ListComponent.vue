@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full justify-between items-center">
+    <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full justify-between items-center hover:bg-gray-200">
         <div class="space-y-2">
             <label class="block text-gray-700 font-medium">IP: {{ ip }}</label>
             <label class="block text-gray-700 font-medium">Name: {{ name }}</label>
@@ -9,13 +9,13 @@
         <div class="flex space-x-2">
             <button
                 @click="shutDownSensor"
-                class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                class="bg-secondary text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
             >
                 Shut Down
             </button>
             <button
                 @click="toggleModal"
-                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
                 Settings
             </button>
@@ -46,8 +46,9 @@ import { HttpStatusCode } from 'axios';
 import { defineEmits } from 'vue';
 import '@/assets/tailwind.css';
 import { UPDATE_CRONJOB_DAYS, UPDATE_CRONJOB_TIME, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
+import router from '@/router';
 
-const emit = defineEmits(['removeSensor']);
+const emit = defineEmits(['removeSensor', 'updateSensorName']);
 
 const props = defineProps({
     ip: { type: String, default: '' },
@@ -69,18 +70,16 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
     switch (action) {
         case UPDATE_NAME_ACTION: {
             const response = await updateSensorName(token, props.ip, props.port, newSettings.name);
-            if (response.status !== HttpStatusCode.Ok) {
-                alert('Error');
+            if (response.status === HttpStatusCode.Unauthorized) {
+                router.push('/login');
             } else {
-                location.reload();
+                emit('updateSensorName', { ip: props.ip, port: props.port, name: newSettings.name });
             }
         }
         case UPDATE_CRONJOB_DAYS: {
             const response = await updateSensorCronJobDays(token, props.ip, props.port, newSettings.days);
-            if (response.status !== HttpStatusCode.Ok) {
-                alert('Error');
-            } else {
-                location.reload();
+            if (response.status === HttpStatusCode.Unauthorized) {
+                router.push('/login');
             }
         }
         case UPDATE_CRONJOB_TIME: {
@@ -91,20 +90,19 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
                 newSettings.hour,
                 newSettings.minute,
             );
-            if (response.status !== HttpStatusCode.Ok) {
-                alert('Error');
-            } else {
-                location.reload();
+            if (response.status !== HttpStatusCode.Unauthorized) {
+                router.push('/login');
             }
         }
     }
 };
 
 const shutDownSensor = async () => {
-    const response = await shutDownSensorApi(getToken(), props.ip, props.port);
-    if (response.status === HttpStatusCode.Ok) {
-        emit('removeSensor', { ip: props.ip, port: props.port });
-        location.reload();
+    if (confirm(`Do you really want to remove and turning off the sensor IP:${props.ip} PORT:${props.port}`)) {
+        const response = await shutDownSensorApi(getToken(), props.ip, props.port);
+        if (response.status === HttpStatusCode.Ok) {
+            emit('removeSensor', { ip: props.ip, port: props.port });
+        }
     }
 };
 </script>

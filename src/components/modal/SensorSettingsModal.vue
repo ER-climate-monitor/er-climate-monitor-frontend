@@ -1,6 +1,6 @@
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-        <div class="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <div class="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-md border-4 border-dashed border-secondary">
             <!-- Modal Title -->
             <h3 class="text-xl font-semibold text-gray-900 mb-4">Sensor Settings</h3>
 
@@ -19,7 +19,7 @@
                 />
                 <button
                     @click="changeName"
-                    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="mt-2 bg-primary text-black font-medium px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     Change Name
                 </button>
@@ -33,12 +33,12 @@
                     id="input-working-days"
                     v-model="newDay"
                     type="text"
-                    placeholder="Add a day"
+                    placeholder="Set new working days"
                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 />
                 <button
                     @click="changeDays"
-                    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="mt-2 bg-primary text-black font-medium px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     Change Days
                 </button>
@@ -71,7 +71,7 @@
                 </div>
                 <button
                     @click="changeTime"
-                    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="mt-2 bg-primary text-black px-4 font-medium py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     Change Time
                 </button>
