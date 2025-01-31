@@ -45,7 +45,9 @@ export const useNotificationState = () => {
     const isInitialised = ref(false);
 
     const prependNotification = (n: Notification) => {
-        notifications.value.unshift(n);
+        if (!notifications.value.some((not) => not.id == n.id)) {
+            notifications.value.unshift(n);
+        }
     };
 
     const loadNotifications = async () => {
