@@ -6,6 +6,8 @@
                 <button @click="$emit('close')" class="text-gray-500">&times;</button>
             </div>
 
+            <SubscriptionControlPanel :subscriptions="userSubscriptions" @subscription-removed="handleUnsubscribe" />
+
             <AlertSelector @subscription-changed="handleSubscriptionChange" />
 
             <AlertList :notifications="notifications" @view-details="openExpandedAlert" />
@@ -15,16 +17,23 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import SubscriptionControlPanel from '@/components/Notification/SubscriptionControlPanel.vue';
 import AlertSelector from '@/components/Notification/AlertSelector.vue';
 import AlertList from '@/components/Notification/AlertList.vue';
 import ExpandedAlert from '@/components/Notification/ExpandedAlert.vue';
 import { type Notification, type Topic, useNotificationState } from '@/stores/notificationStore';
-import { establishSubscription, subscribeToTopic } from '@/apis/notificationsApi';
+import {
+    establishSubscription,
+    fetchUserSubscritpions,
+    subscribeToTopic,
+    unsubscribeToTopic,
+} from '@/apis/notificationsApi';
 import Logger from 'js-logger';
 
 Logger.useDefaults();
 
+const userSubscriptions = ref<Set<Topic>>(new Set());
 const selectedAlert = ref<Notification | null>(null);
 
 const { notifications, prependNotification } = useNotificationState();
@@ -38,12 +47,24 @@ const handleSubscriptionChange = async (ev: Topic) => {
         }
         Logger.info('Subscribing for: ', sub);
         establishSubscription<Notification>(sub.uid, sub.topicAddr, prependNotification);
+        userSubscriptions.value.add(ev);
     } catch (err) {
         Logger.error(`Something went wrong during subscription for ${JSON.stringify(ev)}: `, err);
+    }
+};
+
+const handleUnsubscribe = async (topic: Topic) => {
+    if (await unsubscribeToTopic(topic)) {
+        userSubscriptions.value.delete(topic);
     }
 };
 
 const openExpandedAlert = (alert: Notification) => {
     selectedAlert.value = alert;
 };
+
+onMounted(async () => {
+    const subs = await fetchUserSubscritpions();
+    userSubscriptions.value = new Set(subs);
+});
 </script>
