@@ -10,6 +10,7 @@ import { getToken } from '@/utils/manageToken';
 import axios, { HttpStatusCode } from 'axios';
 import { io } from 'socket.io-client';
 import Logger from 'js-logger';
+import { fromTopicToTopicAddress } from '@/utils/notificationUtils';
 
 Logger.useDefaults();
 
@@ -25,6 +26,20 @@ async function fetchAlertNotification(): Promise<Notification[]> {
         );
     } catch (error) {
         Logger.error((error as Error).message);
+        return [];
+    }
+}
+
+async function fetchUserSubscritpions(): Promise<Topic[]> {
+    try {
+        return (
+            (await httpRequest<null, Topic[]>(
+                'GET',
+                `${config.apiBaseUrl}${config.subscriptionsApi.getSubscriptions}`,
+            )) || []
+        );
+    } catch (error) {
+        Logger.error(error);
         return [];
     }
 }
@@ -55,6 +70,20 @@ async function subscribeToTopic(topic: Topic): Promise<NotificationSubscription 
     }
 }
 
+async function unsubscribeToTopic(topic: Topic): Promise<boolean> {
+    const topicAddr = fromTopicToTopicAddress(topic);
+    try {
+        await httpRequest<null, null>(
+            'DELETE',
+            `${config.apiBaseUrl}${config.subscriptionsApi.unsubscribeToTopic}?topicAddr=${topicAddr}`,
+        );
+        return true;
+    } catch (error) {
+        Logger.error('An error occurred: ', (error as Error).message);
+        return false;
+    }
+}
+
 async function restoreSubscriptions() {
     try {
         const res = await httpRequest<null, { uid: string; topicAddr: string }[]>(
@@ -62,7 +91,9 @@ async function restoreSubscriptions() {
             `${config.apiBaseUrl}${config.subscriptionsApi.restoreSubscriptions}`,
         );
 
-        res?.forEach((subInfo) => establishSubscription(subInfo.uid, subInfo.topicAddr, prependNotification));
+        res?.forEach((subInfo) => {
+            establishSubscription(subInfo.uid, subInfo.topicAddr, prependNotification);
+        });
     } catch (error) {
         Logger.error('An error occurred: ', (error as Error).message);
     }
@@ -129,7 +160,9 @@ function retrieveUserToken(): string {
 export {
     fetchAlertNotification,
     fetchNotificationTopics,
+    fetchUserSubscritpions,
     subscribeToTopic,
+    unsubscribeToTopic,
     establishSubscription,
     restoreSubscriptions,
 };

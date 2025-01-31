@@ -8,6 +8,7 @@ const config = {
     subscriptionsApi: {
         subscribeToTopic: '/alert/subscriptions',
         unsubscribeToTopic: '/alert/subscriptions',
+        getSubscriptions: '/alert/subscriptions',
         restoreSubscriptions: '/alert/subscriptions/restore',
         getUserAlerts: '/alert',
         apiWebSocketRooms: {
