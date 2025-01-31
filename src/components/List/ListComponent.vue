@@ -1,9 +1,9 @@
 <template>
     <div class="bg-white shadow-md rounded-lg p-4 mb-4 w-full justify-between items-center hover:bg-gray-200">
-        <div class="space-y-2">
-            <label class="block text-gray-700 font-medium">IP: {{ ip }}</label>
-            <label class="block text-gray-700 font-medium">Name: {{ name }}</label>
-            <label class="block text-gray-700 font-medium">Port: {{ port }}</label>
+        <div id="sensor-information" class="space-y-2">
+            <h3 class="block text-gray-700 font-medium">IP: {{ ip }}</h3>
+            <h3 for="sensor-information" class="block text-gray-700 font-medium">Name: {{ name }}</h3>
+            <h3 class="block text-gray-700 font-medium">Port: {{ port }}</h3>
         </div>
 
         <div class="flex space-x-2">
