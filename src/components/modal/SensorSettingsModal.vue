@@ -10,13 +10,14 @@
             <!-- Name Section -->
             <div class="mb-6">
                 <h4 class="text-lg font-medium text-gray-900 mb-2">Change Sensor Name</h4>
-                <label class="text-lg font-small text-gray-900" for="input-name"> Name: </label>
+                <label class="text-lg font-small text-gray-900" for="input-name"> Name:
                 <input
                     id="input-name"
                     v-model="localName"
                     type="text"
                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 />
+                </label>
                 <button
                     @click="changeName"
                     class="mt-2 bg-primary text-black font-medium px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -28,7 +29,7 @@
             <!-- Days Section -->
             <div class="mb-6">
                 <h4 class="text-lg font-medium text-gray-900 mb-2">Cronjob days [format: dd-dd]</h4>
-                <label class="text-lg font-small text-gray-900" for="input-working-days"> Days: </label>
+                <label class="text-lg font-small text-gray-900" for="input-working-days"> Days:
                 <input
                     id="input-working-days"
                     v-model="newDay"
@@ -36,6 +37,7 @@
                     placeholder="Set new working days"
                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 />
+                </label>
                 <button
                     @click="changeDays"
                     class="mt-2 bg-primary text-black font-medium px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -48,7 +50,7 @@
             <div class="mb-6">
                 <h4 class="text-lg font-medium text-gray-900 mb-2">Cronjob Time</h4>
                 <div class="flex space-x-4">
-                    <label class="text-lg font-small text-gray-900" for="input-working-hours"> Hours: </label>
+                    <label class="text-lg font-small text-gray-900" for="input-working-hours"> Hours:
                     <input
                         id="input-working-hours"
                         v-model.number="localWorkingHours.hours"
@@ -58,7 +60,8 @@
                         min="0"
                         placeholder="Hours"
                     />
-                    <label class="text-lg font-small text-gray-900" for="input-working-minutes"> Minutes: </label>
+                    </label>
+                    <label class="text-lg font-small text-gray-900" for="input-working-minutes"> Minutes:
                     <input
                         id="input-working-minutes"
                         v-model.number="localWorkingHours.minutes"
@@ -68,6 +71,7 @@
                         class="w-1/2 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                         placeholder="Minutes"
                     />
+                    </label>
                 </div>
                 <button
                     @click="changeTime"
