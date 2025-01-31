@@ -3,17 +3,17 @@
         <div class="bg-white rounded-lg p-6 w-full max-w-xl">
             <div class="flex justify-between mb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl">{{ getAlertIcon(alert.type) }}</span>
-                    <h2 class="text-xl font-bold">{{ alert.sensorName }}</h2>
+                    <span class="text-2xl text-gray-900">{{ getAlertIcon(alert.type) }}</span>
+                    <h2 class="text-xl font-bold text-gray-900">{{ alert.sensorName }}</h2>
                 </div>
                 <button @click="$emit('close')" class="text-gray-500">&times;</button>
             </div>
 
             <div class="prose">
-                <p class="text-lg mb-4">{{ alert.summary }}</p>
+                <p class="text-lg mb-4 text-gray-900">Current value: {{ alert.value }} ({{ alert.unit }})</p>
                 <div class="bg-gray-50 p-4 rounded">
-                    <h3 class="font-bold mb-2">Full Description</h3>
-                    <p>{{ alert.description }}</p>
+                    <h3 class="font-bold mb-2 text-gray-900">Full Description</h3>
+                    <p class="text-gray-900">Query: {{ alert.query.name }}, for value: {{ alert.query.value }}</p>
                 </div>
 
                 <div class="mt-4 text-sm text-gray-500">Received: {{ new Date(alert.timestamp).toLocaleString() }}</div>
