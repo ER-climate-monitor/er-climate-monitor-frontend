@@ -5,7 +5,7 @@
             class="text-lg font-medium text-gray-900 cursor-pointer hover:text-gray-600 transition-colors flex items-center gap-2"
         >
             Subscribe to new Topic
-            <span class="material-symbols-outlined text-sm transition-transform" :class="{ 'rotate-180': isExpanded }">
+            <span class="font-material-symbols text-sm transition-transform" :class="{ 'rotate-180': isExpanded }">
                 expand_more
             </span>
         </h3>
@@ -160,7 +160,3 @@ watch(selectedType, () => {
 
 onMounted(fetchTopics);
 </script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
-</style>

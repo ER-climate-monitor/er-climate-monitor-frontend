@@ -1,7 +1,7 @@
 <template>
     <div class="relative">
-        <button @click="toggleModal" class="p-2 rounded-full hover:bg-gray-100 relative">
-            <i class="bell-icon">🔔</i>
+        <button @click="toggleModal" class="p-2 rounded-full hover:bg-gray-700 relative">
+            <span class="font-material-symbols text-3xl"> notifications </span>
             <NotificationModal v-if="isModalOpen" @close="toggleModal" :notifications="notifications" />
         </button>
     </div>

@@ -10,7 +10,9 @@
                 >
                     <div class="flex items-center gap-3">
                         <div class="text-2xl">
-                            {{ getAlertIcon(alert.type) }}
+                            <span class="font-material-symbols text-gray-800">
+                                {{ getAlertIcon(alert.type) }}
+                            </span>
                         </div>
                         <div>
                             <p class="text-gray-600">{{ `${alert.type}.${alert.sensorName}.${alert.query.name}` }}</p>
