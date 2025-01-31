@@ -1,77 +1,100 @@
 <template>
     <div class="space-y-4">
-        <div class="flex gap-4">
-            <!-- Alert Topic Dropdown -->
-            <div class="flex-1">
-                <select
-                    v-model="selectedType"
-                    class="w-full border p-2 rounded text-gray-900"
-                    :disabled="isLoadingTopics"
-                >
-                    <option value="">Select Topic</option>
-                    <option v-for="typeName in typeNames" :key="typeName" :value="typeName">
-                        {{ typeName }}
-                    </option>
-                </select>
-                <div v-if="isLoadingTopics" class="text-sm text-gray-500 mt-1">Loading topics...</div>
-                <div v-if="topicsError" class="text-sm text-red-500 mt-1">
-                    {{ topicsError }}
-                </div>
-            </div>
-
-            <!-- Sensor Names Dropdown -->
-            <div class="flex-1">
-                <select
-                    v-model="selectedSensor"
-                    class="w-full border p-2 rounded text-gray-900"
-                    :disabled="!selectedType || sensorNames.length === 0"
-                >
-                    <option value="">Select Sensor Name</option>
-                    <option v-for="sensorName in sensorNames" :key="sensorName" :value="sensorName">
-                        {{ sensorName }}
-                    </option>
-                </select>
-            </div>
-
-            <!-- Queries Dropdown -->
-            <div class="flex-1">
-                <select
-                    v-model="selectedQuery"
-                    class="w-full border p-2 rounded text-gray-900"
-                    :disabled="!selectedType || queries.length === 0"
-                >
-                    <option value="">Select Query</option>
-                    <option v-for="query in queries" :key="query" :value="query">
-                        {{ query }}
-                    </option>
-                </select>
-            </div>
-        </div>
-
-        <button
-            @click="subscribe"
-            :disabled="!canSubscribe"
-            class="w-full bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300 disabled:cursor-not-allowed"
+        <h3
+            @click="isExpanded = !isExpanded"
+            class="text-lg font-medium text-gray-900 cursor-pointer hover:text-gray-600 transition-colors flex items-center gap-2"
         >
-            {{ subscribeButtonText }}
-        </button>
+            Subscribe to new Topic
+            <span class="material-symbols-outlined text-sm transition-transform" :class="{ 'rotate-180': isExpanded }">
+                expand_more
+            </span>
+        </h3>
+
+        <Transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="transform scale-y-0 opacity-0"
+            enter-to-class="transform scale-y-100 opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="transform scale-y-100 opacity-100"
+            leave-to-class="transform scale-y-0 opacity-0"
+            :origin="'top'"
+        >
+            <div v-show="isExpanded">
+                <div class="flex gap-4">
+                    <!-- Alert Topic Dropdown -->
+                    <div class="flex-1">
+                        <select
+                            v-model="selectedType"
+                            class="w-full border p-2 rounded text-gray-900"
+                            :disabled="isLoadingTopics"
+                        >
+                            <option value="">Select Topic</option>
+                            <option v-for="typeName in typeNames" :key="typeName" :value="typeName">
+                                {{ typeName }}
+                            </option>
+                        </select>
+                        <div v-if="isLoadingTopics" class="text-sm text-gray-500 mt-1">Loading topics...</div>
+                        <div v-if="topicsError" class="text-sm text-red-500 mt-1">
+                            {{ topicsError }}
+                        </div>
+                    </div>
+
+                    <!-- Sensor Names Dropdown -->
+                    <div class="flex-1">
+                        <select
+                            v-model="selectedSensor"
+                            class="w-full border p-2 rounded text-gray-900"
+                            :disabled="!selectedType || sensorNames.length === 0"
+                        >
+                            <option value="">Select Sensor Name</option>
+                            <option v-for="sensorName in sensorNames" :key="sensorName" :value="sensorName">
+                                {{ sensorName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Queries Dropdown -->
+                    <div class="flex-1">
+                        <select
+                            v-model="selectedQuery"
+                            class="w-full border p-2 rounded text-gray-900"
+                            :disabled="!selectedType || queries.length === 0"
+                        >
+                            <option value="">Select Query</option>
+                            <option v-for="query in queries" :key="query" :value="query">
+                                {{ query }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <button
+                    @click="subscribe"
+                    :disabled="!canSubscribe"
+                    class="w-full bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300 disabled:cursor-not-allowed mt-4"
+                >
+                    {{ subscribeButtonText }}
+                </button>
+            </div>
+        </Transition>
     </div>
 </template>
 
 <script setup lang="ts">
 import { fetchNotificationTopics } from '@/apis/notificationsApi';
 import { type SensorInfos, type Topic } from '@/stores/notificationStore';
-import { computed, ref, watch } from 'vue';
+import Logger from 'js-logger';
+import { computed, onMounted, ref, watch } from 'vue';
 
-const typeNames = ref<string[]>([]);
+Logger.useDefaults();
 
+const isExpanded = ref(true); // Start expanded by default
+const typeNames = ref<Set<string>>(new Set());
 const selectedType = ref<string | undefined>();
 const selectedSensor = ref<string | undefined>();
 const selectedQuery = ref<string | undefined>();
-
 const isLoadingTopics = ref(false);
 const topicsError = ref('');
-
 const topics = ref<SensorInfos[]>([]);
 
 const sensorNames = computed(() => {
@@ -90,6 +113,10 @@ const queries = computed(() => {
     }
 });
 
+const emit = defineEmits<{
+    'subscription-changed': [topic: Topic];
+}>();
+
 const canSubscribe = computed(() => selectedType.value && !isLoadingTopics.value);
 
 const subscribe = () => {
@@ -99,7 +126,10 @@ const subscribe = () => {
         sensorName: selectedSensor.value,
         query: selectedQuery.value,
     };
-    emit('subscription-changed', { topic });
+    emit('subscription-changed', topic);
+    selectedType.value = undefined;
+    selectedSensor.value = undefined;
+    selectedQuery.value = undefined;
 };
 
 const subscribeButtonText = computed(() => {
@@ -118,7 +148,7 @@ const fetchTopics = async () => {
         topicsError.value = 'No topics found...';
     } else {
         topics.value = response;
-        typeNames.value = topics.value.map((t) => t.type);
+        typeNames.value = new Set(topics.value.map((t) => t.type));
     }
     isLoadingTopics.value = false;
 };
@@ -128,9 +158,9 @@ watch(selectedType, () => {
     selectedQuery.value = undefined;
 });
 
-const emit = defineEmits<{
-    'subscription-changed': [{ topic: Topic }];
-}>();
-
-fetchTopics();
+onMounted(fetchTopics);
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+</style>

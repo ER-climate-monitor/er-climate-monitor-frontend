@@ -6,6 +6,8 @@
                 <button @click="$emit('close')" class="text-gray-500">&times;</button>
             </div>
 
+            <SubscriptionControlPanel :subscriptions="userSubscriptions" @subscription-removed="handleUnsubscribe" />
+
             <AlertSelector @subscription-changed="handleSubscriptionChange" />
 
             <AlertList :notifications="notifications" @view-details="openExpandedAlert" />
@@ -15,36 +17,54 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import SubscriptionControlPanel from '@/components/Notification/SubscriptionControlPanel.vue';
 import AlertSelector from '@/components/Notification/AlertSelector.vue';
 import AlertList from '@/components/Notification/AlertList.vue';
 import ExpandedAlert from '@/components/Notification/ExpandedAlert.vue';
-import { type Notification, type Topic } from '@/stores/notificationStore';
+import { type Notification, type Topic, useNotificationState } from '@/stores/notificationStore';
+import {
+    establishSubscription,
+    fetchUserSubscritpions,
+    subscribeToTopic,
+    unsubscribeToTopic,
+} from '@/apis/notificationsApi';
+import Logger from 'js-logger';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
-    notifications: {
-        type: Array<Notification>,
-        required: true,
-    },
-});
+Logger.useDefaults();
 
+const userSubscriptions = ref<Set<Topic>>(new Set());
 const selectedAlert = ref<Notification | null>(null);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const handleSubscriptionChange = (args: { topic: Topic }) => {
-    // LOGIC to subcribe to topic and register web socket
-    // const response = await axios.post('/api/subscribe', { topic, threshold })
-    // const { uid, topicAddr } = response.data
-    // addSubscription({
-    //   topic,
-    //   threshold,
-    //   uid,
-    //   topicAddr
-    // })
-    // registerWebSocketConnection(uid, topicAddr)
+
+const { notifications, prependNotification } = useNotificationState();
+
+const handleSubscriptionChange = async (ev: Topic) => {
+    try {
+        const sub = await subscribeToTopic(ev);
+        if (!sub) {
+            Logger.error('Failed to subscribe for: ', ev);
+            return;
+        }
+        Logger.info('Subscribing for: ', sub);
+        establishSubscription<Notification>(sub.uid, sub.topicAddr, prependNotification);
+        userSubscriptions.value.add(ev);
+    } catch (err) {
+        Logger.error(`Something went wrong during subscription for ${JSON.stringify(ev)}: `, err);
+    }
+};
+
+const handleUnsubscribe = async (topic: Topic) => {
+    if (await unsubscribeToTopic(topic)) {
+        userSubscriptions.value.delete(topic);
+    }
 };
 
 const openExpandedAlert = (alert: Notification) => {
     selectedAlert.value = alert;
 };
+
+onMounted(async () => {
+    const subs = await fetchUserSubscritpions();
+    userSubscriptions.value = new Set(subs);
+});
 </script>
