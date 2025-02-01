@@ -22,6 +22,7 @@
                 <button
                     @click="toggleNotificationModal"
                     class="p-2 rounded-full hover:bg-gray-700 relative flex items-center justify-center"
+                    aria-label="Toggle notifications"
                 >
                     <span class="font-material-symbols text-3xl text-white"> notifications </span>
                 </button>
@@ -29,6 +30,7 @@
                 <button
                     @click="toggleProfileModal"
                     class="focus:outline-none flex items-center justify-center relative"
+                    aria-label="Open profile menu"
                 >
                     <img
                         src="https://via.placeholder.com/40"
@@ -37,7 +39,17 @@
                     />
                 </button>
 
-                <div v-if="isNotificationModalOpen" class="fixed inset-0 z-40" @click="toggleNotificationModal"></div>
+                <div
+                    v-if="isNotificationModalOpen"
+                    class="fixed inset-0 z-40"
+                    @click="toggleNotificationModal"
+                    @keydown.enter="toggleNotificationModal"
+                    @keydown.space="toggleNotificationModal"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Close notifications"
+                ></div>
+
                 <NotificationModal
                     v-if="isNotificationModalOpen"
                     @close="toggleNotificationModal"
@@ -45,7 +57,17 @@
                     class="fixed z-50"
                 />
 
-                <div v-if="isProfileModalOpen" class="fixed inset-0 z-40" @click="toggleProfileModal"></div>
+                <div
+                    v-if="isProfileModalOpen"
+                    class="fixed inset-0 z-40"
+                    @click="toggleProfileModal"
+                    @keydown.enter="toggleProfileModal"
+                    @keydown.space="toggleProfileModal"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Close profile modal"
+                ></div>
+
                 <div v-if="isProfileModalOpen" class="absolute top-12 right-0 z-50">
                     <ProfileModal
                         :isOpen="isProfileModalOpen"

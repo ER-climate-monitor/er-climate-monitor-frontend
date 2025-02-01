@@ -2,6 +2,10 @@
     <div class="space-y-4">
         <h3
             @click="isExpanded = !isExpanded"
+            @keydown.enter="isExpanded = !isExpanded"
+            @keydown.space="isExpanded = !isExpanded"
+            role="button"
+            tabindex="0"
             class="text-lg font-medium text-gray-900 cursor-pointer hover:text-gray-600 transition-colors flex items-center gap-2"
         >
             Subscribe to new Topic
@@ -23,16 +27,20 @@
                 <div class="flex gap-4">
                     <!-- Alert Topic Dropdown -->
                     <div class="flex-1">
-                        <select
-                            v-model="selectedType"
-                            class="w-full border p-2 rounded text-gray-900"
-                            :disabled="isLoadingTopics"
-                        >
-                            <option value="">Select Topic</option>
-                            <option v-for="typeName in typeNames" :key="typeName" :value="typeName">
-                                {{ typeName }}
-                            </option>
-                        </select>
+                        <label for="alert-topic" class="block text-sm font-medium text-gray-700"
+                            >Select Topic
+                            <select
+                                id="alert-topic"
+                                v-model="selectedType"
+                                class="w-full border p-2 rounded text-gray-900"
+                                :disabled="isLoadingTopics"
+                            >
+                                <option value="">Select Topic</option>
+                                <option v-for="typeName in typeNames" :key="typeName" :value="typeName">
+                                    {{ typeName }}
+                                </option>
+                            </select>
+                        </label>
                         <div v-if="isLoadingTopics" class="text-sm text-gray-500 mt-1">Loading topics...</div>
                         <div v-if="topicsError" class="text-sm text-red-500 mt-1">
                             {{ topicsError }}
@@ -41,30 +49,38 @@
 
                     <!-- Sensor Names Dropdown -->
                     <div class="flex-1">
-                        <select
-                            v-model="selectedSensor"
-                            class="w-full border p-2 rounded text-gray-900"
-                            :disabled="!selectedType || sensorNames.length === 0"
-                        >
-                            <option value="">Select Sensor Name</option>
-                            <option v-for="sensorName in sensorNames" :key="sensorName" :value="sensorName">
-                                {{ sensorName }}
-                            </option>
-                        </select>
+                        <label for="sensor-name" class="block text-sm font-medium text-gray-700"
+                            >Select Sensor
+                            <select
+                                id="sensor-name"
+                                v-model="selectedSensor"
+                                class="w-full border p-2 rounded text-gray-900"
+                                :disabled="!selectedType || sensorNames.length === 0"
+                            >
+                                <option value="">Select Sensor Name</option>
+                                <option v-for="sensorName in sensorNames" :key="sensorName" :value="sensorName">
+                                    {{ sensorName }}
+                                </option>
+                            </select>
+                        </label>
                     </div>
 
                     <!-- Queries Dropdown -->
                     <div class="flex-1">
-                        <select
-                            v-model="selectedQuery"
-                            class="w-full border p-2 rounded text-gray-900"
-                            :disabled="!selectedType || queries.length === 0"
-                        >
-                            <option value="">Select Query</option>
-                            <option v-for="query in queries" :key="query" :value="query">
-                                {{ query }}
-                            </option>
-                        </select>
+                        <label for="query" class="block text-sm font-medium text-gray-700"
+                            >Select Query
+                            <select
+                                id="query"
+                                v-model="selectedQuery"
+                                class="w-full border p-2 rounded text-gray-900"
+                                :disabled="!selectedType || queries.length === 0"
+                            >
+                                <option value="">Select Query</option>
+                                <option v-for="query in queries" :key="query" :value="query">
+                                    {{ query }}
+                                </option>
+                            </select>
+                        </label>
                     </div>
                 </div>
 

@@ -1,7 +1,9 @@
 <template>
     <div class="space-y-4">
-        <h3
+        <button
             @click="isExpanded = !isExpanded"
+            @keydown.enter="isExpanded = !isExpanded"
+            @keydown.space="isExpanded = !isExpanded"
             hover:text-gray-600
             transition-colors
             flex
@@ -13,7 +15,8 @@
             <span class="font-material-symbols text-sm transition-transform" :class="{ 'rotate-180': isExpanded }">
                 expand_more
             </span>
-        </h3>
+        </button>
+
         <Transition
             enter-active-class="transition duration-200 ease-out"
             enter-from-class="transform scale-y-0 opacity-0"

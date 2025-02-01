@@ -6,6 +6,10 @@
                     v-for="alert in notifications"
                     :key="alert.id"
                     @click="$emit('view-details', alert)"
+                    @keydown.enter="$emit('view-details', alert)"
+                    @keydown.space="$emit('view-details', alert)"
+                    role="button"
+                    tabindex="0"
                     class="p-4 border rounded cursor-pointer hover:bg-gray-50"
                 >
                     <div class="flex items-center gap-3">

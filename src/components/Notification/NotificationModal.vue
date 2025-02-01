@@ -1,5 +1,12 @@
 <template>
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" @click="$emit('close')">
+    <div
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        role="button"
+        tabindex="0"
+        @click="$emit('close')"
+        @keydown.enter="$emit('close')"
+        @keydown.space="$emit('close')"
+    >
         <div class="bg-white rounded-lg p-6 w-full max-w-2xl" @click.stop>
             <div class="flex justify-between mb-4">
                 <h2 class="text-xl font-bold text-gray-900">Notifications</h2>
@@ -16,6 +23,7 @@
         </div>
     </div>
 </template>
+
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import SubscriptionControlPanel from '@/components/Notification/SubscriptionControlPanel.vue';
