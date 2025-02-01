@@ -1,10 +1,12 @@
 <template>
     <div class="flex flex-row items-center justify-center p-4">
         <div class="flex flex-col p-4">
-            <SensorTypeSelect :sensorTypes="sensorTypes" v-model="selectedSensorType" />
-            <div v-if="isLoading">Loading locations...</div>
-            <div v-else-if="sensorLocations.length === 0">
-                <p>No locations found for the selected sensor type.</p>
+            <SensorTypeSelect :sensorTypes="sensorTypes" v-model="selectedSensorType" class="w-80" />
+            <div class="h-8">
+                <div v-if="isLoading">Loading locations...</div>
+                <div v-else-if="sensorLocations.length === 0">
+                    <p>No locations found.</p>
+                </div>
             </div>
         </div>
         <MapComponent :sensorType="selectedSensorType" :locations="sensorLocations" class="z-10" />
