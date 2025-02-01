@@ -141,7 +141,9 @@ watch(
 
 <style scoped>
 #map {
-    width: 80vh;
-    height: 60vh;
+    width: 100vh;
+    height: 80vh;
+    border-radius: 16px;
+    overflow: hidden;
 }
 </style>
