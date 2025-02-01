@@ -103,6 +103,7 @@ import Logger from 'js-logger';
 import { computed, onMounted, ref, watch } from 'vue';
 
 Logger.useDefaults();
+Logger.setLevel(Logger.ERROR);
 
 const isExpanded = ref(true); // Start expanded by default
 const typeNames = ref<Set<string>>(new Set());
@@ -159,7 +160,6 @@ const fetchTopics = async () => {
     topicsError.value = '';
     const response = await fetchNotificationTopics();
 
-    console.log(response);
     if (response.length == 0) {
         topicsError.value = 'No topics found...';
     } else {

@@ -40,6 +40,7 @@ import {
 import Logger from 'js-logger';
 
 Logger.useDefaults();
+Logger.setLevel(Logger.ERROR);
 
 const userSubscriptions = ref<Set<Topic>>(new Set());
 const selectedAlert = ref<Notification | null>(null);

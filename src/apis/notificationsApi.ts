@@ -13,6 +13,7 @@ import Logger from 'js-logger';
 import { fromTopicToTopicAddress } from '@/utils/notificationUtils';
 
 Logger.useDefaults();
+Logger.setLevel(Logger.ERROR);
 
 const { prependNotification } = useNotificationState();
 
