@@ -18,16 +18,42 @@
                 </ul>
             </div>
 
-            <div class="relative">
-                <button @click="toggleModal" class="focus:outline-none">
+            <div class="relative flex items-center gap-2">
+                <button
+                    @click="toggleNotificationModal"
+                    class="p-2 rounded-full hover:bg-gray-700 relative flex items-center justify-center"
+                >
+                    <span class="font-material-symbols text-3xl text-white"> notifications </span>
+                </button>
+
+                <button
+                    @click="toggleProfileModal"
+                    class="focus:outline-none flex items-center justify-center relative"
+                >
                     <img
                         src="https://via.placeholder.com/40"
                         alt="Profile"
-                        class="w-10 h-10 rounded-full cursor-pointer"
+                        class="w-10 h-10 rounded-full cursor-pointer border-2 border-white"
                     />
                 </button>
 
-                <ProfileModal :isOpen="isModalOpen" :isLoggedIn="isLoggedIn" @close="closeModal" @logout="logout" />
+                <div v-if="isNotificationModalOpen" class="fixed inset-0 z-40" @click="toggleNotificationModal"></div>
+                <NotificationModal
+                    v-if="isNotificationModalOpen"
+                    @close="toggleNotificationModal"
+                    :notifications="notifications"
+                    class="fixed z-50"
+                />
+
+                <div v-if="isProfileModalOpen" class="fixed inset-0 z-40" @click="toggleProfileModal"></div>
+                <div v-if="isProfileModalOpen" class="absolute top-12 right-0 z-50">
+                    <ProfileModal
+                        :isOpen="isProfileModalOpen"
+                        :isLoggedIn="isLoggedIn"
+                        @close="closeProfileModal"
+                        @logout="logout"
+                    />
+                </div>
             </div>
         </div>
     </nav>
@@ -36,21 +62,29 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ProfileModal from '@/components/NavBar/ProfileModal.vue';
+import { type Notification } from '@/stores/notificationStore';
+import NotificationModal from '@/components/Notification/NotificationModal.vue';
 
-const isModalOpen = ref(false);
+const notifications = ref<Notification[]>([]);
+const isNotificationModalOpen = ref(false);
+const toggleNotificationModal = () => {
+    isNotificationModalOpen.value = !isNotificationModalOpen.value;
+};
+
+const isProfileModalOpen = ref(false);
 
 const isLoggedIn = ref(false);
 
-const toggleModal = () => {
-    isModalOpen.value = !isModalOpen.value;
+const toggleProfileModal = () => {
+    isProfileModalOpen.value = !isProfileModalOpen.value;
 };
 
-const closeModal = () => {
-    isModalOpen.value = false;
+const closeProfileModal = () => {
+    isProfileModalOpen.value = false;
 };
 
 const logout = () => {
     isLoggedIn.value = false;
-    closeModal();
+    closeProfileModal();
 };
 </script>
