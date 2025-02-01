@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
-        path: '/map',
-        name: 'map',
+        path: '/',
+        name: 'home',
         component: () => import('../views/MapView.vue'),
     },
     {
