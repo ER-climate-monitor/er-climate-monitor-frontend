@@ -1,17 +1,18 @@
 <template>
     <div class="w-full max-w-md mb-4">
         <label for="sensor-type" class="block text-sm font-medium text-gray-700 mb-2"> Select Sensor Type </label>
-        <select
-            id="sensor-type"
-            v-model="selectedSensor"
-            @change="onSensorTypeChange"
-            class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        >
-            <option value="">-- Select a sensor type --</option>
-            <option v-for="type in sensorTypes" :key="type" :value="type">
+        <ul class="w-full border rounded-lg shadow-sm bg-white">
+            <li
+                v-for="type in sensorTypes"
+                :key="type"
+                @click="selectSensor(type)"
+                class="px-4 py-2 cursor-pointer hover:bg-pastelViolet-50 transition-colors duration-200"
+                :class="{ 'bg-pastelViolet-100': selectedSensor === type }"
+            >
                 {{ type }}
-            </option>
-        </select>
+            </li>
+            <li v-if="sensorTypes.length === 0" class="px-4 py-2 text-gray-500">No sensor types available</li>
+        </ul>
     </div>
 </template>
 
@@ -40,7 +41,24 @@ watch(
     },
 );
 
-const onSensorTypeChange = () => {
-    emit('update:modelValue', selectedSensor.value);
+const selectSensor = (type: string) => {
+    selectedSensor.value = type;
+    emit('update:modelValue', type);
 };
 </script>
+
+<style scoped>
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+</style>
