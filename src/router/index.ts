@@ -17,11 +17,6 @@ const routes = [
         component: () => import('../views/RegisterView.vue'),
     },
     {
-        path: '/notifications',
-        name: 'not',
-        component: () => import('../views/NotificationVIew.vue'),
-    },
-    {
         path: '/sensors',
         name: 'sensors',
         component: () => import('../views/ListSensorView.vue'),
