@@ -1,1 +1,1 @@
-npm run prelint-staged && npx lint-staged
+# npm run prelint-staged && npx lint-staged

@@ -5,22 +5,25 @@
             class="pb-10 sticky top-0 border-4 border-dashed border-secondary bg-white rounded p-2 mb-5 mt-2"
         >
             <h2 class="text-gray-900 text-center font-bold">Search a Sensor</h2>
-            <label class="text-lg font-medium text-gray-900" for="input-name"> Type a value: </label>
+            <label class="text-lg font-medium text-gray-900" for="input-name"> Type a value:
             <input
+                name="input-name"
                 id="input-name"
                 type="text"
                 v-model="searchQuery"
                 placeholder="Search a sensor"
                 class="w-full p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
             />
+            </label>
             <div id="radio-filters" class="bg-white rounded-md mt-2">
                 <h3 class="font-bold text-gray-900 text-center">Filters:</h3>
                 <ul class="list-none mt-2">
                     <li v-for="filter in filters" :key="filter" class="mb-2 flex items-center gap-2 cursor-pointer">
                         <label
-                            class="text-lg font-medium text-gray-900 mt-4 block"
+                            class="text-lg font-medium text-gray-900 mt-4 block text-left"
                             :for="'radio-button-' + filter"
-                        ></label>
+                        >
+                        {{ filter }}: 
                         <input
                             type="radio"
                             :id="'radio-button-' + filter"
@@ -29,8 +32,6 @@
                             name="search-group"
                             class="cursor-pointer font-medium"
                         />
-                        <label :for="'radio-button-' + filter" class="text-gray-800 cursor-pointer font-bold">
-                            {{ filter }}
                         </label>
                     </li>
                 </ul>

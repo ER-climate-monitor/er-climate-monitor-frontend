@@ -23,6 +23,9 @@ export default {
                 third: '#D7D982',
                 fourth: '#AE82D9',
             },
+            fontFamily: {
+                'material-symbols': ['Material Symbols Outlined'],
+            },
         },
     },
     plugins: [],

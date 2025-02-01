@@ -3,7 +3,7 @@
         <form @submit.prevent="handleRegister" class="w-full max-w-md bg-white rounded-lg shadow-lg p-6 space-y-6">
             <h1 class="text-2xl font-bold text-gray-800 text-center">Register</h1>
             <div class="space-y-2">
-                <label for="email" class="block text-sm font-bold text-gray-900"> Email </label>
+                <label for="email" class="block text-sm font-bold text-gray-900"> Email
                 <input
                     type="text"
                     id="email"
@@ -12,9 +12,10 @@
                     class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
                     required
                 />
+                </label>
             </div>
             <div class="space-y-2">
-                <label for="password" class="block text-sm font-bold text-gray-900"> Password </label>
+                <label for="password" class="block text-sm font-bold text-gray-900"> Password
                 <input
                     type="password"
                     id="password"
@@ -23,6 +24,7 @@
                     class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
                     required
                 />
+                </label>
             </div>
             <button
                 type="submit"
