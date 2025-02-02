@@ -41,6 +41,8 @@ export const getAlertIcon = (alertType: string): string => {
 
 export const useNotificationState = () => {
     const notifications = useLocalStorage<Notification[]>('notifications', []);
+    const activePopups = useLocalStorage<Notification[]>('activePopups', []);
+
     const isLoading = ref(false);
     const error = ref<string | null>(null);
     const isInitialised = ref(false);
@@ -49,6 +51,15 @@ export const useNotificationState = () => {
         if (!notifications.value.some((not) => not.id == n.id)) {
             notifications.value.unshift(n);
         }
+    };
+
+    const showNotificationPopup = (n: Notification, duration: number = 5000) => {
+        activePopups.value.unshift(n);
+        setTimeout(() => removeNotificationPopup(n.id), duration);
+    };
+
+    const removeNotificationPopup = (id: string) => {
+        activePopups.value = activePopups.value.filter((n) => n.id !== id);
     };
 
     const loadNotifications = async () => {
@@ -75,7 +86,10 @@ export const useNotificationState = () => {
 
     return {
         notifications,
+        activePopups,
         prependNotification,
         loadNotifications,
+        showNotificationPopup,
+        removeNotificationPopup,
     };
 };

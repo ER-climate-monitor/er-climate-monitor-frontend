@@ -45,7 +45,7 @@ Logger.setLevel(Logger.ERROR);
 const userSubscriptions = ref<Set<Topic>>(new Set());
 const selectedAlert = ref<Notification | null>(null);
 
-const { notifications, prependNotification } = useNotificationState();
+const { notifications, prependNotification, showNotificationPopup } = useNotificationState();
 
 const handleSubscriptionChange = async (ev: Topic) => {
     try {
@@ -55,7 +55,10 @@ const handleSubscriptionChange = async (ev: Topic) => {
             return;
         }
         Logger.info('Subscribing for: ', sub);
-        establishSubscription<Notification>(sub.uid, sub.topicAddr, prependNotification);
+        establishSubscription<Notification>(sub.uid, sub.topicAddr, (n: Notification) => {
+            prependNotification(n);
+            showNotificationPopup(n);
+        });
         userSubscriptions.value.add(ev);
     } catch (err) {
         Logger.error(`Something went wrong during subscription for ${JSON.stringify(ev)}: `, err);
