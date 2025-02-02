@@ -25,7 +25,6 @@
         >
             <div v-show="isExpanded">
                 <div class="flex gap-4">
-                    <!-- Alert Topic Dropdown -->
                     <div class="flex-1">
                         <label for="alert-topic" class="block text-sm font-medium text-gray-700"
                             >Select Topic
@@ -47,7 +46,6 @@
                         </div>
                     </div>
 
-                    <!-- Sensor Names Dropdown -->
                     <div class="flex-1">
                         <label for="sensor-name" class="block text-sm font-medium text-gray-700"
                             >Select Sensor
@@ -65,7 +63,6 @@
                         </label>
                     </div>
 
-                    <!-- Queries Dropdown -->
                     <div class="flex-1">
                         <label for="query" class="block text-sm font-medium text-gray-700"
                             >Select Query
@@ -87,7 +84,7 @@
                 <button
                     @click="subscribe"
                     :disabled="!canSubscribe"
-                    class="w-full bg-blue-500 text-white px-4 py-2 rounded disabled:bg-blue-300 disabled:cursor-not-allowed mt-4"
+                    class="w-full bg-pastelViolet text-white px-4 py-2 rounded disabled:bg-pastelViolet-300 disabled:cursor-not-allowed mt-4"
                 >
                     {{ subscribeButtonText }}
                 </button>

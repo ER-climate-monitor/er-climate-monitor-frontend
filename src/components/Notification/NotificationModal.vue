@@ -10,7 +10,7 @@
         <div class="bg-white rounded-lg p-6 w-full max-w-2xl" @click.stop>
             <div class="flex justify-between mb-4">
                 <h2 class="text-xl font-bold text-gray-900">Notifications</h2>
-                <button @click="$emit('close')" class="text-gray-500">&times;</button>
+                <button @click="$emit('close')" class="text-gray-500 text-2xl"><span class="font-material-symbols">close</span></button>
             </div>
 
             <SubscriptionControlPanel :subscriptions="userSubscriptions" @subscription-removed="handleUnsubscribe" />
