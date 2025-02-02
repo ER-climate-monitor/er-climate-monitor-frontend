@@ -13,8 +13,9 @@ import Logger from 'js-logger';
 import { fromTopicToTopicAddress } from '@/utils/notificationUtils';
 
 Logger.useDefaults();
+Logger.setLevel(Logger.ERROR);
 
-const { prependNotification } = useNotificationState();
+const { prependNotification, showNotificationPopup } = useNotificationState();
 
 async function fetchAlertNotification(): Promise<Notification[]> {
     try {
@@ -92,7 +93,10 @@ async function restoreSubscriptions() {
         );
 
         res?.forEach((subInfo) => {
-            establishSubscription(subInfo.uid, subInfo.topicAddr, prependNotification);
+            establishSubscription(subInfo.uid, subInfo.topicAddr, (n: Notification) => {
+              prependNotification(n);
+              showNotificationPopup(n);
+            });
         });
     } catch (error) {
         Logger.error('An error occurred: ', (error as Error).message);
@@ -153,7 +157,6 @@ async function httpRequest<B, X>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url:
 }
 
 function retrieveUserToken(): string {
-    // return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Nzk1MmUwNzYxOTMyOWU5NTE1ZTgyZjUiLCJ1c2VyRW1haWwiOiJwaXNjaW9AZ21haWwuY29tIiwidXNlclJvbGUiOiJub3JtYWwiLCJpYXQiOjE3MzgxNDM1ODUsImV4cCI6MTczODE0NzE4NX0.m7iyb4ATmFDw4RMZuJQrCIuFWqpgERYoItC_n1BKqoI';
     return getToken();
 }
 

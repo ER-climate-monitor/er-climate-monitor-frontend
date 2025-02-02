@@ -63,6 +63,7 @@ import { type Topic } from '@/stores/notificationStore';
 import Logger from 'js-logger';
 
 Logger.useDefaults();
+Logger.setLevel(Logger.ERROR);
 
 const props = defineProps<{ subscriptions: Set<Topic> }>();
 const emit = defineEmits<{ 'subscription-removed': [topic: Topic] }>();
