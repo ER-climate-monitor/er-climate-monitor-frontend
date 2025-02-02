@@ -33,7 +33,7 @@
                     aria-label="Open profile menu"
                 >
                     <img
-                        src="https://via.placeholder.com/40"
+                        src="../../assets/images/icons8-user-48.png"
                         alt="Profile"
                         class="w-10 h-10 rounded-full cursor-pointer border-2 border-white"
                     />
