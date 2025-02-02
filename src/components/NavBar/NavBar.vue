@@ -53,7 +53,6 @@
                 <NotificationModal
                     v-if="isNotificationModalOpen"
                     @close="toggleNotificationModal"
-                    :notifications="notifications"
                     class="fixed z-50"
                 />
 
@@ -84,10 +83,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ProfileModal from '@/components/NavBar/ProfileModal.vue';
-import { type Notification } from '@/stores/notificationStore';
 import NotificationModal from '@/components/Notification/NotificationModal.vue';
 
-const notifications = ref<Notification[]>([]);
 const isNotificationModalOpen = ref(false);
 const toggleNotificationModal = () => {
     isNotificationModalOpen.value = !isNotificationModalOpen.value;
