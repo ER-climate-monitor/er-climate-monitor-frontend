@@ -3,7 +3,7 @@
         <div class="bg-white rounded-lg p-6 w-full max-w-xl">
             <div class="flex justify-between mb-4">
                 <div class="flex items-center gap-3">
-                    <span class="text-2xl text-gray-900">{{ getAlertIcon(alert.type) }}</span>
+                    <span class="font-material-symbols text-2xl text-gray-900">{{ getAlertIcon(alert.type) }}</span>
                     <h2 class="text-xl font-bold text-gray-900">{{ alert.sensorName }}</h2>
                 </div>
                 <button @click="$emit('close')" class="text-gray-500">&times;</button>
