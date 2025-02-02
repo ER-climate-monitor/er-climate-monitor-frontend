@@ -45,7 +45,7 @@ Logger.setLevel(Logger.ERROR);
 const userSubscriptions = ref<Set<Topic>>(new Set());
 const selectedAlert = ref<Notification | null>(null);
 
-const { notifications, prependNotification, showNotificationPopup } = useNotificationState();
+const { notifications, prependNotification, showNotificationPopup, getUnkonwnsId } = useNotificationState();
 
 const handleSubscriptionChange = async (ev: Topic) => {
     try {
@@ -56,6 +56,7 @@ const handleSubscriptionChange = async (ev: Topic) => {
         }
         Logger.info('Subscribing for: ', sub);
         establishSubscription<Notification>(sub.uid, sub.topicAddr, (n: Notification) => {
+            if (!n.id) n.id = getUnkonwnsId.value;
             prependNotification(n);
             showNotificationPopup(n);
         });

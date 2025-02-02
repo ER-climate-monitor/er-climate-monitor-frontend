@@ -15,7 +15,7 @@ import { fromTopicToTopicAddress } from '@/utils/notificationUtils';
 Logger.useDefaults();
 Logger.setLevel(Logger.ERROR);
 
-const { prependNotification, showNotificationPopup } = useNotificationState();
+const { prependNotification, showNotificationPopup, getUnkonwnsId } = useNotificationState();
 
 async function fetchAlertNotification(): Promise<Notification[]> {
     try {
@@ -94,8 +94,9 @@ async function restoreSubscriptions() {
 
         res?.forEach((subInfo) => {
             establishSubscription(subInfo.uid, subInfo.topicAddr, (n: Notification) => {
-              prependNotification(n);
-              showNotificationPopup(n);
+                if (!n.id) n.id = getUnkonwnsId.value;
+                prependNotification(n);
+                showNotificationPopup(n);
             });
         });
     } catch (error) {

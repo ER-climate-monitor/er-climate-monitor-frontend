@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@vueuse/core';
 import { fetchAlertNotification, restoreSubscriptions } from '@/apis/notificationsApi';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 export type SensorInfos = {
     name: string;
@@ -43,6 +43,10 @@ export const useNotificationState = () => {
     const notifications = useLocalStorage<Notification[]>('notifications', []);
     const activePopups = useLocalStorage<Notification[]>('activePopups', []);
 
+    const getUnkonwnsId = computed(() => {
+        return crypto.randomUUID();
+    });
+
     const isLoading = ref(false);
     const error = ref<string | null>(null);
     const isInitialised = ref(false);
@@ -53,12 +57,13 @@ export const useNotificationState = () => {
         }
     };
 
-    const showNotificationPopup = (n: Notification, duration: number = 5000) => {
+    const showNotificationPopup = (n: Notification) => {
         activePopups.value.unshift(n);
-        setTimeout(() => removeNotificationPopup(n.id), duration);
+        console.log(JSON.stringify(activePopups.value.map((n) => n.id)));
     };
 
     const removeNotificationPopup = (id: string) => {
+        console.log('removing popup');
         activePopups.value = activePopups.value.filter((n) => n.id !== id);
     };
 
@@ -91,5 +96,6 @@ export const useNotificationState = () => {
         loadNotifications,
         showNotificationPopup,
         removeNotificationPopup,
+        getUnkonwnsId,
     };
 };

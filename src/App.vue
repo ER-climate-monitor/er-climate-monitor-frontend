@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import './assets/tailwind.css';
 import NavBar from '@/components/NavBar/NavBar.vue';
-import NotificationPopup from './components/Notification/NotificationPopup.vue';
+import NotificationPopup from './components/Notification/NotificationPopupContainer.vue';
 </script>
 
 <template>
