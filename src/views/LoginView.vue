@@ -113,7 +113,7 @@ const handleLogin = async (e: Event) => {
 
         if (response.status === HttpStatusCode.Ok) {
             setToken(response.data[USER_JWT_TOKEN_HEADER]);
-            router.push('/home');
+            router.push('/');
         }
     } catch (error) {
         handleLoginError(error);

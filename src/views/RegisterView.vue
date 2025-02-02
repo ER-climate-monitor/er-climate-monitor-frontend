@@ -73,7 +73,7 @@ const handleRegister = async (e: Event) => {
 
         if (response.status === HttpStatusCode.Created) {
             setToken(response.data[USER_JWT_TOKEN_HEADER]);
-            router.push('/home');
+            router.push('/');
         }
     } catch (error) {
         if (error instanceof Error) {
