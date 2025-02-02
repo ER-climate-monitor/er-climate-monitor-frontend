@@ -2,11 +2,11 @@
     <div class="space-y-4">
         <div class="max-h-[640px] overflow-y-auto pr-2">
             <div class="space-y-4">
-                <div
+                <button
                     v-for="alert in notifications"
                     :key="alert.id"
                     @click="$emit('view-details', alert)"
-                    class="p-4 border rounded cursor-pointer hover:bg-gray-50"
+                    class="w-full p-4 border rounded cursor-pointer hover:bg-gray-50 text-left"
                 >
                     <div class="flex items-center gap-3">
                         <div class="text-2xl">
@@ -18,7 +18,7 @@
                             <p class="text-gray-600">{{ `${alert.type}.${alert.sensorName}.${alert.query.name}` }}</p>
                         </div>
                     </div>
-                </div>
+                </button>
             </div>
         </div>
     </div>
