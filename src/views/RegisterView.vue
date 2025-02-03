@@ -3,27 +3,29 @@
         <form @submit.prevent="handleRegister" class="w-full max-w-md bg-white rounded-lg shadow-lg p-6 space-y-6">
             <h1 class="text-2xl font-bold text-gray-800 text-center">Register</h1>
             <div class="space-y-2">
-                <label for="email" class="block text-sm font-bold text-gray-900"> Email
-                <input
-                    type="text"
-                    id="email"
-                    v-model="email"
-                    placeholder="Enter your email"
-                    class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
-                    required
-                />
+                <label for="email" class="block text-sm font-bold text-gray-900">
+                    Email
+                    <input
+                        type="text"
+                        id="email"
+                        v-model="email"
+                        placeholder="Enter your email"
+                        class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
+                        required
+                    />
                 </label>
             </div>
             <div class="space-y-2">
-                <label for="password" class="block text-sm font-bold text-gray-900"> Password
-                <input
-                    type="password"
-                    id="password"
-                    v-model="password"
-                    placeholder="Enter your password"
-                    class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
-                    required
-                />
+                <label for="password" class="block text-sm font-bold text-gray-900">
+                    Password
+                    <input
+                        type="password"
+                        id="password"
+                        v-model="password"
+                        placeholder="Enter your password"
+                        class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 text-gray-600 focus:outline-none"
+                        required
+                    />
                 </label>
             </div>
             <button
@@ -48,11 +50,12 @@
 import ErrorMessage from '@/components/Login/ErrorMessage.vue';
 import { checkEmail, checkPassword, registerUser } from '@/apis/authenticationApi';
 import { USER_JWT_TOKEN_HEADER } from '@/headers/userHeaders';
-import { setToken } from '@/utils/manageToken';
 import { HttpStatusCode } from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 
+const userStore = useUserStore();
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
@@ -72,7 +75,7 @@ const handleRegister = async (e: Event) => {
         const response = await registerUser(email.value, password.value);
 
         if (response.status === HttpStatusCode.Created) {
-            setToken(response.data[USER_JWT_TOKEN_HEADER]);
+            userStore.setToken(response.data[USER_JWT_TOKEN_HEADER]);
             router.push('/');
         }
     } catch (error) {
