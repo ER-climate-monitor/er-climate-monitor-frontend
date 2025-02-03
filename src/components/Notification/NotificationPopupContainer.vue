@@ -14,10 +14,16 @@
 <script setup lang="ts">
 import { useNotificationState } from '@/stores/notificationStore';
 import NotificationPopup from '@/components/Notification/NotificationPopup.vue';
+import { onMounted } from 'vue';
 
-const { activePopups, removeNotificationPopup } = useNotificationState();
+const { loadNotifications, activePopups, removeNotificationPopup } = useNotificationState();
 
 const handlePopupClose = (id: string) => {
     removeNotificationPopup(id);
 };
+
+onMounted(async () => {
+    await loadNotifications();
+});
+
 </script>
