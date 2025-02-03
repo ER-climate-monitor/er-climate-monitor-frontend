@@ -43,13 +43,15 @@ import {
     updateSensorCronJobTime,
     updateSensorName,
 } from '@/apis/sensorRegistryApi';
-import { getToken } from '@/utils/manageToken';
+import { useUserStore } from '@/stores/userStore';
 import { HttpStatusCode } from 'axios';
 import { defineEmits } from 'vue';
 import '@/assets/tailwind.css';
 import { UPDATE_CRONJOB_DAYS, UPDATE_CRONJOB_TIME, UPDATE_NAME_ACTION } from '@/headers/sensorHeaders';
 import router from '@/router';
 import ConfirmationModal from '../modal/ConfirmationModal.vue';
+
+const userStore = useUserStore();
 
 const emit = defineEmits(['removeSensor', 'updateSensorName']);
 
@@ -70,7 +72,7 @@ const toggleModal = () => {
 
 const saveSettings = async (newSettings: { [key: string]: string }) => {
     const action = newSettings.action;
-    const token = getToken();
+    const token = userStore.token.value;
     switch (action) {
         case UPDATE_NAME_ACTION: {
             const response = await updateSensorName(token, props.ip, props.port, newSettings.name);
@@ -113,7 +115,7 @@ const showConfirmModal = () => {
 };
 
 const shutDownSensor = async () => {
-    const response = await shutDownSensorApi(getToken(), props.ip, props.port);
+    const response = await shutDownSensorApi(userStore.token.value, props.ip, props.port);
     if (response.status === HttpStatusCode.Ok) {
         emit('removeSensor', { ip: props.ip, port: props.port });
     }
