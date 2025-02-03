@@ -69,8 +69,8 @@ export const useNotificationState = () => {
 
     const loadNotifications = async () => {
         if (isInitialised.value) {
-          await restoreSubscriptions();
-          return;
+            await restoreSubscriptions();
+            return;
         }
 
         isLoading.value = true;
@@ -79,6 +79,7 @@ export const useNotificationState = () => {
         try {
             notifications.value = await fetchAlertNotification();
             isInitialised.value = true;
+            await restoreSubscriptions();
         } catch (err) {
             error.value = err instanceof Error ? err.message : 'Failed to load notifications...';
         } finally {
