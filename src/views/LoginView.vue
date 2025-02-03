@@ -119,7 +119,8 @@ const handleLogin = async (e: Event) => {
         console.log(response);
         if (response.status === HttpStatusCode.Ok) {
             userStore.setToken(response.data[USER_JWT_TOKEN_HEADER]);
-            router.push('/home');
+            userStore.setUser({ email: response.data['userEmail'], isAdmin: response.data['userRole'] == 'admin' });
+            router.push('/');
         }
     } catch (error) {
         handleLoginError(error);

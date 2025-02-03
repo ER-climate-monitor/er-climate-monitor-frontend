@@ -10,7 +10,8 @@
                             Home
                         </router-link>
                     </li>
-                    <li>
+
+                    <li v-if="isAdmin">
                         <router-link to="/sensors" class="text-white hover:text-primary transition duration-300">
                             Sensors
                         </router-link>
@@ -84,7 +85,7 @@ import NotificationModal from '@/components/Notification/NotificationModal.vue';
 import router from '@/router';
 
 const userStore = useUserStore();
-
+const { isAdmin } = userStore;
 const isNotificationModalOpen = ref(false);
 const toggleNotificationModal = () => {
     isNotificationModalOpen.value = !isNotificationModalOpen.value;
