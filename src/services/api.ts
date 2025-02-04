@@ -7,7 +7,7 @@ export const fetchSensorLocations = async (sensorType: string): Promise<SensorLo
 
     try {
         const response = await axios.get<SensorLocation[]>(
-            `http://localhost:3000/v0/sensor/${sensorType.toLowerCase()}/locations`,
+            `http://localhost:8887/v0/sensor/${sensorType.toLowerCase()}/locations`,
         );
 
         return response.data;
@@ -22,7 +22,7 @@ export const fetchSensorDetections = async (sensorType: string, sensorId: string
 
     try {
         const response = await axios.get<Detection[]>(
-            `http://localhost:3000/v0/sensor/${sensorType.toLowerCase()}/${sensorId}/detections?last=15`,
+            `http://localhost:8887/v0/sensor/${sensorType.toLowerCase()}/${sensorId}/detections?last=15`,
         );
 
         return response.data;

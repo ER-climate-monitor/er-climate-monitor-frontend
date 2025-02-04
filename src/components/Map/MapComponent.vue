@@ -117,7 +117,7 @@ const addMarkers = (locations: SensorLocation[]) => {
     locations.forEach((location) => {
         const marker = leaflet.marker([location.latitude, location.longitude]);
 
-        marker.on('click', (e) => markerOnClick(location._id, e));
+        marker.on('click', (e) => markerOnClick(location.sensorId, e));
         map.addLayer(marker);
     });
 };
