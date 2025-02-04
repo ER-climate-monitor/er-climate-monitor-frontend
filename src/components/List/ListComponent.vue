@@ -96,7 +96,7 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
                 newSettings.hour,
                 newSettings.minute,
             );
-            if (response.status !== HttpStatusCode.Unauthorized) {
+            if (response.status === HttpStatusCode.Unauthorized) {
                 router.push('/login');
             }
             return;
