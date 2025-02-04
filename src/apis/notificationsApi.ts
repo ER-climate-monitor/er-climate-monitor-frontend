@@ -6,7 +6,7 @@ import {
     type SensorInfos,
     type Topic,
 } from '@/stores/notificationStore';
-import { getToken } from '@/utils/manageToken';
+import { useUserStore } from '@/stores/userStore';
 import axios, { HttpStatusCode } from 'axios';
 import { io } from 'socket.io-client';
 import Logger from 'js-logger';
@@ -16,6 +16,7 @@ Logger.useDefaults();
 Logger.setLevel(Logger.ERROR);
 
 const { prependNotification, showNotificationPopup, getUnkonwnsId } = useNotificationState();
+const userStore = useUserStore();
 
 async function fetchAlertNotification(): Promise<Notification[]> {
     try {
@@ -158,7 +159,7 @@ async function httpRequest<B, X>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url:
 }
 
 function retrieveUserToken(): string {
-    return getToken();
+    return userStore.token.value;
 }
 
 export {

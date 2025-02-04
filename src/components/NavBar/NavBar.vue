@@ -10,7 +10,8 @@
                             Home
                         </router-link>
                     </li>
-                    <li>
+
+                    <li v-if="isAdmin">
                         <router-link to="/sensors" class="text-white hover:text-primary transition duration-300">
                             Sensors
                         </router-link>
@@ -50,11 +51,7 @@
                     aria-label="Close notifications"
                 ></div>
 
-                <NotificationModal
-                    v-if="isNotificationModalOpen"
-                    @close="toggleNotificationModal"
-                    class="fixed z-50"
-                />
+                <NotificationModal v-if="isNotificationModalOpen" @close="toggleNotificationModal" class="fixed z-50" />
 
                 <div
                     v-if="isProfileModalOpen"
@@ -70,7 +67,7 @@
                 <div v-if="isProfileModalOpen" class="absolute top-12 right-0 z-50">
                     <ProfileModal
                         :isOpen="isProfileModalOpen"
-                        :isLoggedIn="isLoggedIn"
+                        :isLoggedIn="userStore.isAuthenticated.value"
                         @close="closeProfileModal"
                         @logout="logout"
                     />
@@ -82,18 +79,19 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useUserStore } from '@/stores/userStore';
 import ProfileModal from '@/components/NavBar/ProfileModal.vue';
 import NotificationModal from '@/components/Notification/NotificationModal.vue';
+import router from '@/router';
 
+const userStore = useUserStore();
+const { isAdmin } = userStore;
 const isNotificationModalOpen = ref(false);
 const toggleNotificationModal = () => {
     isNotificationModalOpen.value = !isNotificationModalOpen.value;
 };
 
 const isProfileModalOpen = ref(false);
-
-const isLoggedIn = ref(false);
-
 const toggleProfileModal = () => {
     isProfileModalOpen.value = !isProfileModalOpen.value;
 };
@@ -103,7 +101,8 @@ const closeProfileModal = () => {
 };
 
 const logout = () => {
-    isLoggedIn.value = false;
+    userStore.removeToken();
+    router.push('/login');
     closeProfileModal();
 };
 </script>

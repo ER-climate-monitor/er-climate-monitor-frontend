@@ -5,15 +5,16 @@
             class="pb-10 sticky top-0 border-4 border-dashed border-secondary bg-white rounded p-2 mb-5 mt-2"
         >
             <h2 class="text-gray-900 text-center font-bold">Search a Sensor</h2>
-            <label class="text-lg font-medium text-gray-900" for="input-name"> Type a value:
-            <input
-                name="input-name"
-                id="input-name"
-                type="text"
-                v-model="searchQuery"
-                placeholder="Search a sensor"
-                class="w-full p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-            />
+            <label class="text-lg font-medium text-gray-900" for="input-name">
+                Type a value:
+                <input
+                    name="input-name"
+                    id="input-name"
+                    type="text"
+                    v-model="searchQuery"
+                    placeholder="Search a sensor"
+                    class="w-full p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                />
             </label>
             <div id="radio-filters" class="bg-white rounded-md mt-2">
                 <h3 class="font-bold text-gray-900 text-center">Filters:</h3>
@@ -23,15 +24,15 @@
                             class="text-lg font-medium text-gray-900 mt-4 block text-left"
                             :for="'radio-button-' + filter"
                         >
-                        {{ filter }}: 
-                        <input
-                            type="radio"
-                            :id="'radio-button-' + filter"
-                            :value="filter"
-                            v-model="selectedFilter"
-                            name="search-group"
-                            class="cursor-pointer font-medium"
-                        />
+                            {{ filter }}:
+                            <input
+                                type="radio"
+                                :id="'radio-button-' + filter"
+                                :value="filter"
+                                v-model="selectedFilter"
+                                name="search-group"
+                                class="cursor-pointer font-medium"
+                            />
                         </label>
                     </li>
                 </ul>
@@ -57,7 +58,7 @@
 import SensorItem from '@/components/List/ListComponent.vue';
 import { getAllSensors } from '@/apis/sensorRegistryApi';
 import { ref, onMounted, watch, type Ref } from 'vue';
-import { getToken } from '@/utils/manageToken';
+import { useUserStore } from '@/stores/userStore';
 import { BasicSensor, type Sensor } from '@/models/sensorModel';
 import { AxiosError, HttpStatusCode } from 'axios';
 import router from '@/router';
@@ -66,9 +67,10 @@ const displayedSensor: Ref<Array<Sensor>> = ref([]);
 const searchQuery = ref('');
 const filters = ['ip', 'port', 'name'];
 const selectedFilter = ref(filters[0]);
+const userStore = useUserStore();
 
 onMounted(async () => {
-    const token = getToken();
+    const token = userStore.token.value;
     try {
         const response = await getAllSensors(token);
         response.data.sensors.forEach((element: Sensor) => {

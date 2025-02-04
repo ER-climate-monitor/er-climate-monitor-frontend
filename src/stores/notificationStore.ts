@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@vueuse/core';
 import { fetchAlertNotification, restoreSubscriptions } from '@/apis/notificationsApi';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 export type SensorInfos = {
     name: string;
@@ -68,7 +68,10 @@ export const useNotificationState = () => {
     };
 
     const loadNotifications = async () => {
-        if (isInitialised.value) return;
+        if (isInitialised.value) {
+            await restoreSubscriptions();
+            return;
+        }
 
         isLoading.value = true;
         error.value = null;
@@ -76,18 +79,13 @@ export const useNotificationState = () => {
         try {
             notifications.value = await fetchAlertNotification();
             isInitialised.value = true;
+            await restoreSubscriptions();
         } catch (err) {
             error.value = err instanceof Error ? err.message : 'Failed to load notifications...';
         } finally {
             isLoading.value = false;
         }
     };
-
-    onMounted(async () => {
-        // TODO: see where it should be better to initialise notiications (now on first store usage)
-        await loadNotifications();
-        await restoreSubscriptions();
-    });
 
     return {
         notifications,

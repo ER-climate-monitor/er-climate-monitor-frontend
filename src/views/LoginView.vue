@@ -4,52 +4,56 @@
             <h1 class="text-2xl font-bold text-gray-800 text-center">Login</h1>
 
             <div class="space-y-2">
-                <label for="email" class="block text-sm font-bold text-gray-900 text-left">Email
-                <input
-                    type="text"
-                    id="email"
-                    v-model="email"
-                    placeholder="Enter your email"
-                    class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
-                    required
-                />
+                <label for="email" class="block text-sm font-bold text-gray-900 text-left"
+                    >Email
+                    <input
+                        type="text"
+                        id="email"
+                        v-model="email"
+                        placeholder="Enter your email"
+                        class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
+                        required
+                    />
                 </label>
             </div>
 
             <div class="space-y-2">
-                <label for="password" class="block text-sm font-bold text-gray-900">Password
-                <input
-                    type="password"
-                    id="password"
-                    v-model="password"
-                    placeholder="Enter your password"
-                    class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
-                    required
-                />
+                <label for="password" class="block text-sm font-bold text-gray-900"
+                    >Password
+                    <input
+                        type="password"
+                        id="password"
+                        v-model="password"
+                        placeholder="Enter your password"
+                        class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
+                        required
+                    />
                 </label>
             </div>
 
             <div class="flex items-center space-x-2">
-                <label for="isAdmin" class="text-sm font-medium text-gray-900">Log in as Admin
-                <input
-                    type="checkbox"
-                    id="isAdmin"
-                    v-model="isAdmin"
-                    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
+                <label for="isAdmin" class="text-sm font-medium text-gray-900"
+                    >Log in as Admin
+                    <input
+                        type="checkbox"
+                        id="isAdmin"
+                        v-model="isAdmin"
+                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
                 </label>
             </div>
 
             <div v-if="isAdmin" class="space-y-2">
-                <label for="apiKey" class="block text-sm font-bold text-gray-900">API Key
-                <input
-                    type="text"
-                    id="apiKey"
-                    v-model="apiKey"
-                    placeholder="Enter your API key"
-                    class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
-                    required
-                />
+                <label for="apiKey" class="block text-sm font-bold text-gray-900"
+                    >API Key
+                    <input
+                        type="text"
+                        id="apiKey"
+                        v-model="apiKey"
+                        placeholder="Enter your API key"
+                        class="w-full px-4 py-2 border-2 border-black rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-700"
+                        required
+                    />
                 </label>
             </div>
 
@@ -80,7 +84,9 @@ import ErrorMessage from '@/components/Login/ErrorMessage.vue';
 import { checkEmail, checkPassword, loginAdmin, loginUser } from '@/apis/authenticationApi';
 import { AxiosError, HttpStatusCode } from 'axios';
 import { USER_JWT_TOKEN_HEADER } from '@/headers/userHeaders';
-import { setToken } from '@/utils/manageToken';
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
 
 const email = ref('');
 const password = ref('');
@@ -110,9 +116,10 @@ const handleLogin = async (e: Event) => {
 
     try {
         const response = await loginFn(email.value, password.value, isAdmin.value ? apiKey.value : '');
-
+        console.log(response);
         if (response.status === HttpStatusCode.Ok) {
-            setToken(response.data[USER_JWT_TOKEN_HEADER]);
+            userStore.setToken(response.data[USER_JWT_TOKEN_HEADER]);
+            userStore.setUser({ email: response.data['userEmail'], isAdmin: response.data['userRole'] == 'admin' });
             router.push('/');
         }
     } catch (error) {
