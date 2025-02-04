@@ -24,7 +24,6 @@
         <SensorSettingsModal
             v-if="isModalVisible"
             :name="name"
-            :days="days"
             :workingHours="workingHours"
             @close="toggleModal"
             @save="saveSettings"
@@ -63,7 +62,6 @@ const props = defineProps({
 
 const isModalVisible = ref(false);
 const isConfirmModalVisible = ref(false);
-const days = ref([]); // Assume this comes from the backend
 const workingHours = ref({ hours: 0, minutes: 0 });
 
 const toggleModal = () => {
@@ -98,7 +96,7 @@ const saveSettings = async (newSettings: { [key: string]: string }) => {
                 newSettings.hour,
                 newSettings.minute,
             );
-            if (response.status !== HttpStatusCode.Unauthorized) {
+            if (response.status === HttpStatusCode.Unauthorized) {
                 router.push('/login');
             }
             return;

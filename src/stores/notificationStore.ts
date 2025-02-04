@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@vueuse/core';
 import { fetchAlertNotification, restoreSubscriptions } from '@/apis/notificationsApi';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 export type SensorInfos = {
     name: string;
@@ -32,7 +32,7 @@ export type NotificationSubscription = {
 
 export const getAlertIcon = (alertType: string): string => {
     const icons: { [key: string]: string } = {
-        'hydro-level': 'water',
+        water: 'water',
         temperature: 'thermostat',
         rain: 'rainy',
     };
@@ -59,16 +59,17 @@ export const useNotificationState = () => {
 
     const showNotificationPopup = (n: Notification) => {
         activePopups.value.unshift(n);
-        console.log(JSON.stringify(activePopups.value.map((n) => n.id)));
     };
 
     const removeNotificationPopup = (id: string) => {
-        console.log('removing popup');
         activePopups.value = activePopups.value.filter((n) => n.id !== id);
     };
 
     const loadNotifications = async () => {
-        if (isInitialised.value) return;
+        if (isInitialised.value) {
+            await restoreSubscriptions();
+            return;
+        }
 
         isLoading.value = true;
         error.value = null;
@@ -76,18 +77,13 @@ export const useNotificationState = () => {
         try {
             notifications.value = await fetchAlertNotification();
             isInitialised.value = true;
+            await restoreSubscriptions();
         } catch (err) {
             error.value = err instanceof Error ? err.message : 'Failed to load notifications...';
         } finally {
             isLoading.value = false;
         }
     };
-
-    onMounted(async () => {
-        // TODO: see where it should be better to initialise notiications (now on first store usage)
-        await loadNotifications();
-        await restoreSubscriptions();
-    });
 
     return {
         notifications,
