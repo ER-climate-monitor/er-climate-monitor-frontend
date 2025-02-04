@@ -48,7 +48,13 @@ async function fetchUserSubscritpions(): Promise<Topic[]> {
 
 async function fetchNotificationTopics(): Promise<SensorInfos[]> {
     try {
-        return (await httpRequest<null, SensorInfos[]>('GET', `${config.apiBaseUrl}${config.apiAlertTopics}`)) || [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const res = await httpRequest<null, any>('GET', `${config.apiBaseUrl}${config.apiAlertTopics}`);
+        if (res.sensors) {
+          return res.sensors as SensorInfos[];
+        } else {
+          return res;
+        }
     } catch (error) {
         Logger.error((error as Error).message);
         return [];

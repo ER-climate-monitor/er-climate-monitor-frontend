@@ -157,13 +157,18 @@ const fetchTopics = async () => {
     topicsError.value = '';
     const response = await fetchNotificationTopics();
 
-    if (response.length == 0) {
-        topicsError.value = 'No topics found...';
-    } else {
-        topics.value = response;
-        typeNames.value = new Set(topics.value.map((t) => t.type));
+    try {
+        if (response.length == 0) {
+            topicsError.value = 'No topics found...';
+        } else {
+            topics.value = response;
+            typeNames.value = new Set(topics.value.map((t) => t.type));
+        }
+    } catch (error) {
+        Logger.info(error);
+    } finally {
+        isLoadingTopics.value = false;
     }
-    isLoadingTopics.value = false;
 };
 
 watch(selectedType, () => {
