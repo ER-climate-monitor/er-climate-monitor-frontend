@@ -32,7 +32,7 @@ export type NotificationSubscription = {
 
 export const getAlertIcon = (alertType: string): string => {
     const icons: { [key: string]: string } = {
-        'hydro-level': 'water',
+        water: 'water',
         temperature: 'thermostat',
         rain: 'rainy',
     };
@@ -59,11 +59,9 @@ export const useNotificationState = () => {
 
     const showNotificationPopup = (n: Notification) => {
         activePopups.value.unshift(n);
-        console.log(JSON.stringify(activePopups.value.map((n) => n.id)));
     };
 
     const removeNotificationPopup = (id: string) => {
-        console.log('removing popup');
         activePopups.value = activePopups.value.filter((n) => n.id !== id);
     };
 
