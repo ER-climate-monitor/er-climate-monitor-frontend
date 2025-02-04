@@ -58,13 +58,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { type Topic } from '@/stores/notificationStore';
 import Logger from 'js-logger';
 
 Logger.useDefaults();
 Logger.setLevel(Logger.ERROR);
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{ subscriptions: Set<Topic> }>();
 const emit = defineEmits<{ 'subscription-removed': [topic: Topic] }>();
 
@@ -81,6 +82,4 @@ const handleUnsubscribe = async (topic: Topic) => {
         isUnsubscribing.value = false;
     }
 };
-
-onMounted(() => Logger.info(`Current number of subscribed topics: ${props.subscriptions.size}`));
 </script>
