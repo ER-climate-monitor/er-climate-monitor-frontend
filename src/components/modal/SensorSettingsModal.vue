@@ -92,7 +92,6 @@ import '@/assets/tailwind.css';
 
 const props = defineProps({
     name: { type: String, required: true },
-    days: { type: Array, default: () => [] },
     workingHours: { type: Object, default: () => ({ hours: 0, minutes: 0 }) },
 });
 
