@@ -32,7 +32,7 @@ export type NotificationSubscription = {
 
 export const getAlertIcon = (alertType: string): string => {
     const icons: { [key: string]: string } = {
-        water: 'water',
+        'idro_level': 'water',
         temperature: 'thermostat',
         rain: 'rainy',
     };
