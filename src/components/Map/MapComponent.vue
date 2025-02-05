@@ -3,7 +3,6 @@
 </template>
 
 <script setup lang="ts">
-import { fetchSensorDetections } from '@/services/api';
 import type { SensorLocation } from '@/types/SensorLocation';
 import leaflet from 'leaflet';
 import { onMounted, onUnmounted, watch } from 'vue';
@@ -12,6 +11,8 @@ import { CategoryScale, LineController, LineElement, PointElement, LinearScale, 
 import { io, Socket } from 'socket.io-client';
 import { createSensorChart, formatShortDate } from '@/utils/mapUtils';
 import type { Detection } from '@/types/SensorDetection';
+import { fetchSensorDetections } from '@/apis/detectionApi';
+import { useUserStore } from '@/stores/userStore';
 
 Chart.register(CategoryScale, LineController, LineElement, PointElement, LinearScale, Title);
 const { sensorType, locations } = defineProps({
@@ -27,6 +28,7 @@ const { sensorType, locations } = defineProps({
 
 let map: leaflet.Map;
 let socket: Socket | null = null;
+const userStore = useUserStore();
 
 onMounted(() => {
     map = leaflet.map('map').setView([44.5, 10.9], 8); // center position on Emilia-Romagna
@@ -56,7 +58,7 @@ onMounted(() => {
                 .addTo(map);
         });
 
-    socket = io('http://localhost:3001');
+    socket = io('http://localhost:3000');
 });
 
 onUnmounted(() => {
@@ -66,9 +68,10 @@ onUnmounted(() => {
 });
 
 async function markerOnClick(sensorId: string, e: { latlng: leaflet.LatLngExpression }) {
+    const token = userStore.token.value;
     socket.emit('subscribe', sensorId);
 
-    const detections = await fetchSensorDetections(sensorType, sensorId);
+    const detections = await fetchSensorDetections(sensorType, sensorId, token);
 
     if (!detections || detections.length === 0) {
         leaflet.popup().setLatLng(e.latlng).setContent('No detections available').openOn(map);

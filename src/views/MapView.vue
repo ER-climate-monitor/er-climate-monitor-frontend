@@ -17,18 +17,21 @@
 import { ref, watch } from 'vue';
 import SensorTypeSelect from '@/components/Map/SensorTypeSelect.vue';
 import MapComponent from '@/components/Map/MapComponent.vue';
-import { fetchSensorLocations } from '@/services/api';
 import type { SensorLocation } from '@/types/SensorLocation';
+import { fetchSensorLocations } from '@/apis/detectionApi';
+import { useUserStore } from '@/stores/userStore';
 
 const isLoading = ref(false);
 const sensorTypes = ref(['Temperature', 'Hydro', 'Air Quality']);
 const selectedSensorType = ref<string>('');
 const sensorLocations = ref<SensorLocation[]>([]);
+const userStore = useUserStore();
 
 const updateSensorLocations = async () => {
     isLoading.value = true;
+    const token = userStore.token.value;
     try {
-        const locations = await fetchSensorLocations(selectedSensorType.value);
+        const locations = await fetchSensorLocations(selectedSensorType.value, token);
         sensorLocations.value = locations;
     } catch (error) {
         console.error('Error fetching sensor locations:', error);

@@ -24,7 +24,7 @@ export const useUserStore = () => {
     };
 
     const removeToken = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem(USER_JWT_TOKEN_HEADER);
         localStorage.removeItem('userEmail');
         localStorage.removeItem('isAdmin');
     };
