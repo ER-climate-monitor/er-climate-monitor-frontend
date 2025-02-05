@@ -14,7 +14,7 @@
                 tabindex="0"
                 :aria-selected="selectedSensor === type"
             >
-                {{ type }}
+                {{ sensorDisplayNames[type]?.icon }} {{ sensorDisplayNames[type]?.label }}
             </li>
             <li v-if="sensorTypes.length === 0" class="px-4 py-2 text-gray-500">No sensor types available</li>
         </ul>
@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+import { sensorDisplayNames } from '@/costant/sensorDisplayNames';
 import { defineProps, defineEmits, watch, ref } from 'vue';
 
 const props = defineProps({

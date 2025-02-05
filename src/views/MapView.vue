@@ -20,9 +20,10 @@ import MapComponent from '@/components/Map/MapComponent.vue';
 import type { SensorLocation } from '@/types/SensorLocation';
 import { fetchSensorLocations } from '@/apis/detectionApi';
 import { useUserStore } from '@/stores/userStore';
+import { sensorDisplayNames } from '@/costant/sensorDisplayNames';
 
 const isLoading = ref(false);
-const sensorTypes = ref(['Temperature', 'Hydro', 'Air Quality']);
+const sensorTypes = ref(Object.keys(sensorDisplayNames));
 const selectedSensorType = ref<string>('');
 const sensorLocations = ref<SensorLocation[]>([]);
 const userStore = useUserStore();
