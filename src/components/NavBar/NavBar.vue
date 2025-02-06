@@ -94,17 +94,18 @@ watch(
     () => userStore.token.value,
     async (newToken) => {
         if (newToken) {
-            // Se il token cambia ed è valido, rifai la fetch
             const response = await authorizedUser(newToken);
             if (response.status === HttpStatusCode.Accepted) {
                 isAdmin.value = response.data['userRole'] === 'admin';
+            } else {
+                userStore.removeToken();
             }
         } else {
-            isAdmin.value = false; // Se il token è nullo, l'utente non è admin
+            isAdmin.value = false;
         }
     },
     { immediate: true },
-); // Esegui subito la prima volta
+);
 
 const toggleNotificationModal = () => {
     isNotificationModalOpen.value = !isNotificationModalOpen.value;

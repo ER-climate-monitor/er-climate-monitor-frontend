@@ -57,6 +57,8 @@ onMounted(async () => {
     if (response.status === HttpStatusCode.Accepted) {
         isAdmin.value = response.data['userRole'] == 'admin';
         userEmail.value = response.data['userEmail'];
+    } else {
+        userStore.removeToken();
     }
 });
 
