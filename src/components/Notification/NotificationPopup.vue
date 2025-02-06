@@ -18,7 +18,7 @@
                 {{ notification.sensorName }}
             </h6>
             <span class="text-xs text-gray-500">
-                {{ notification.timestamp }}
+                {{ formatShortDate(notification.timestamp) }}
             </span>
         </div>
 
@@ -29,6 +29,7 @@
 </template>
 <script setup lang="ts">
 import { getAlertIcon } from '@/stores/notificationStore';
+import { formatShortDate } from '@/utils/mapUtils';
 import { onMounted } from 'vue';
 
 const props = defineProps({
