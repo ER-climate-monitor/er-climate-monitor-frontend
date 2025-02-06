@@ -38,6 +38,8 @@ import {
     unsubscribeToTopic,
 } from '@/apis/notificationsApi';
 import Logger from 'js-logger';
+import { Socket } from 'socket.io-client';
+import { fromTopicToTopicAddress } from '@/utils/notificationUtils';
 
 Logger.useDefaults();
 Logger.setLevel(Logger.ERROR);
@@ -47,6 +49,8 @@ const selectedAlert = ref<Notification | null>(null);
 
 const { notifications, prependNotification, showNotificationPopup, getUnkonwnsId } = useNotificationState();
 
+const subscriptions_connections: Map<string, Socket> = new Map()
+
 const handleSubscriptionChange = async (ev: Topic) => {
     try {
         const sub = await subscribeToTopic(ev);
@@ -55,12 +59,13 @@ const handleSubscriptionChange = async (ev: Topic) => {
             return;
         }
         Logger.info('Subscribing for: ', sub);
-        establishSubscription<Notification>(sub.uid, sub.topicAddr, (n: Notification) => {
+        const socket = establishSubscription<Notification>(sub.uid, sub.topicAddr, (n: Notification) => {
             if (!n.id) n.id = getUnkonwnsId.value;
             prependNotification(n);
             showNotificationPopup(n);
         });
         userSubscriptions.value.add(ev);
+        subscriptions_connections.set(fromTopicToTopicAddress(ev), socket)
     } catch (err) {
         Logger.error(`Something went wrong during subscription for ${JSON.stringify(ev)}: `, err);
     }
@@ -69,6 +74,11 @@ const handleSubscriptionChange = async (ev: Topic) => {
 const handleUnsubscribe = async (topic: Topic) => {
     if (await unsubscribeToTopic(topic)) {
         userSubscriptions.value.delete(topic);
+        if (subscriptions_connections.has(fromTopicToTopicAddress(topic))) {
+            console.log(subscriptions_connections.get(fromTopicToTopicAddress(topic)))
+        }
+        subscriptions_connections.get(fromTopicToTopicAddress(topic))?.close()
+        subscriptions_connections.delete(fromTopicToTopicAddress(topic))
     }
 };
 
@@ -81,3 +91,4 @@ onMounted(async () => {
     userSubscriptions.value = new Set(subs);
 });
 </script>
+

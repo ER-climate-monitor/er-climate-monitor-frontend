@@ -8,7 +8,7 @@ import {
 } from '@/stores/notificationStore';
 import { useUserStore } from '@/stores/userStore';
 import axios, { HttpStatusCode } from 'axios';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import Logger from 'js-logger';
 import { fromTopicToTopicAddress } from '@/utils/notificationUtils';
 
@@ -111,9 +111,9 @@ async function restoreSubscriptions() {
     }
 }
 
-function establishSubscription<M>(uid: string, topicAddr: string, messageConsumer: (_: M) => void) {
+function establishSubscription<M>(uid: string, topicAddr: string, messageConsumer: (_: M) => void): Socket {
     const scoket = io(`http://${API_HOST}:${API_PORT}`, { transports: ['websocket'] });
-
+    scoket.connect()
     scoket.on(config.subscriptionsApi.apiWebSocketRooms.CONNECTION, () => {
         Logger.info('Client successfully connected to socket for topic: ', topicAddr);
         scoket.emit(config.subscriptionsApi.apiWebSocketRooms.REGISTRATION, uid, topicAddr);
@@ -138,6 +138,8 @@ function establishSubscription<M>(uid: string, topicAddr: string, messageConsume
         Logger.info(`New incoming message for topic ${topicAddr} => `, JSON.stringify(message));
         messageConsumer(message);
     });
+
+    return scoket
 }
 
 async function httpRequest<B, X>(method: 'POST' | 'GET' | 'PUT' | 'DELETE', url: string, body?: B): Promise<X | null> {
@@ -177,3 +179,4 @@ export {
     establishSubscription,
     restoreSubscriptions,
 };
+
