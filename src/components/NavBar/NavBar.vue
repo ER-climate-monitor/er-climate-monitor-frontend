@@ -78,15 +78,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import ProfileModal from '@/components/NavBar/ProfileModal.vue';
 import NotificationModal from '@/components/Notification/NotificationModal.vue';
+import { authorizedUser } from '@/apis/authenticationApi';
 import router from '@/router';
+import { HttpStatusCode } from 'axios';
 
 const userStore = useUserStore();
-const { isAdmin } = userStore;
+const isAdmin = ref(false);
 const isNotificationModalOpen = ref(false);
+
+watch(
+    () => userStore.token.value,
+    async (newToken) => {
+        if (newToken) {
+            // Se il token cambia ed è valido, rifai la fetch
+            const response = await authorizedUser(newToken);
+            if (response.status === HttpStatusCode.Accepted) {
+                isAdmin.value = response.data['userRole'] === 'admin';
+            }
+        } else {
+            isAdmin.value = false; // Se il token è nullo, l'utente non è admin
+        }
+    },
+    { immediate: true },
+); // Esegui subito la prima volta
+
 const toggleNotificationModal = () => {
     isNotificationModalOpen.value = !isNotificationModalOpen.value;
 };

@@ -69,7 +69,7 @@ onUnmounted(() => {
 
 async function markerOnClick(sensorId: string, e: { latlng: leaflet.LatLngExpression }) {
     const token = userStore.token.value;
-    socket.emit('subscribe', sensorId);
+    socket?.emit('subscribe', sensorId);
 
     const detections = await fetchSensorDetections(sensorType, sensorId, token);
 
@@ -86,7 +86,7 @@ async function markerOnClick(sensorId: string, e: { latlng: leaflet.LatLngExpres
 
     const chart = createSensorChart(canvas, labels, values);
 
-    socket.on('new-detection', (detection: Detection) => {
+    socket?.on('new-detection', (detection: Detection) => {
         detections.push(detection);
 
         chart.data.labels?.push(detection.timestamp);

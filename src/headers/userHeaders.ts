@@ -6,6 +6,7 @@ const USER_ACTION = 'action';
 
 const REGISTER_ACTION = 'register';
 const LOGIN_ACTION = 'login';
+const AUTHENTICATE_ACTION = 'authenticate';
 
 const ERROR_TAG = 'X-Error-Message';
 const USER_TOKEN_HEADER = 'x-user-token';
@@ -20,6 +21,7 @@ export {
     USER_TOKEN_HEADER,
     USER_ACTION,
     LOGIN_ACTION,
+    AUTHENTICATE_ACTION,
     REGISTER_ACTION,
     USER_APIKEY_HEADER,
 };

@@ -2,16 +2,19 @@ import axios from 'axios';
 import { config } from '@/config/config';
 import {
     LOGIN_ACTION,
+    AUTHENTICATE_ACTION,
     REGISTER_ACTION,
     USER_ACTION,
     USER_EMAIL_HEADER,
     USER_PASSWORD_HEADER,
     USER_APIKEY_HEADER,
+    USER_JWT_TOKEN_HEADER,
 } from '@/headers/userHeaders';
 
 const REGISTER_PATH = config.apiBaseUrl + '/authentication/user/register';
 const LOGIN_PATH = config.apiBaseUrl + '/authentication/user/login';
 const LOGIN_ADMIN_PATH = config.apiBaseUrl + '/authentication/user/admin/login';
+const AUTHORIZED_PATH = config.apiBaseUrl + '/authentication/user/authorized';
 
 function checkEmail(email: string) {
     const emailRegex =
@@ -22,6 +25,13 @@ function checkEmail(email: string) {
 function checkPassword(password: string) {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
+}
+
+async function authorizedUser(token: string) {
+    return await axios.post(AUTHORIZED_PATH, {
+        [USER_ACTION]: AUTHENTICATE_ACTION,
+        [USER_JWT_TOKEN_HEADER]: token,
+    });
 }
 
 async function loginUser(email: string, password: string) {
@@ -56,4 +66,4 @@ async function registerUser(email: string, password: string) {
     });
 }
 
-export { loginUser, loginAdmin, checkEmail, checkPassword, registerUser };
+export { loginUser, loginAdmin, checkEmail, checkPassword, registerUser, authorizedUser };

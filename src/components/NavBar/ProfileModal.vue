@@ -34,7 +34,10 @@
 </template>
 
 <script setup lang="ts">
+import { authorizedUser } from '@/apis/authenticationApi';
 import { useUserStore } from '@/stores/userStore';
+import { HttpStatusCode } from 'axios';
+import { onMounted, ref } from 'vue';
 
 defineProps({
     isOpen: {
@@ -45,8 +48,17 @@ defineProps({
 
 const emit = defineEmits(['close', 'logout']);
 const userStore = useUserStore();
-const { userEmail, isAdmin, isAuthenticated } = userStore;
-console.log(isAdmin);
+const { isAuthenticated } = userStore;
+const isAdmin = ref(false);
+const userEmail = ref('');
+
+onMounted(async () => {
+    const response = await authorizedUser(userStore.token.value);
+    if (response.status === HttpStatusCode.Accepted) {
+        isAdmin.value = response.data['userRole'] == 'admin';
+        userEmail.value = response.data['userEmail'];
+    }
+});
 
 const closeModal = () => {
     emit('close');
