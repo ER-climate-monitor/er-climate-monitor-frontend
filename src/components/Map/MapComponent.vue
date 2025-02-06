@@ -87,16 +87,18 @@ async function markerOnClick(sensorId: string, e: { latlng: leaflet.LatLngExpres
     const chart = createSensorChart(canvas, labels, values);
 
     socket?.on('new-detection', (detection: Detection) => {
-        detections.push(detection);
+        if (detection.sensorId === sensorId) {
+            detections.push(detection);
 
-        chart.data.labels?.push(formatShortDate(detection.timestamp));
-        chart.data.datasets.forEach((dataset) => {
-            dataset.data.push(detection.value);
+            chart.data.labels?.push(formatShortDate(detection.timestamp));
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(detection.value);
 
-            if (dataset.data.length > 5) {
-                dataset.data.shift();
-            }
-        });
+                if (dataset.data.length > 5) {
+                    dataset.data.shift();
+                }
+            });
+        }
 
         if (chart.data.labels && chart.data.labels.length > 5) {
             chart.data.labels.shift();
