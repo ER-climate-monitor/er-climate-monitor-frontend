@@ -20,7 +20,7 @@
                     </p>
                 </div>
 
-                <div class="mt-4 text-sm text-gray-500">Received: {{ new Date(alert.timestamp).toLocaleString() }}</div>
+                <div class="mt-4 text-sm text-gray-500">Received: {{ formatShortDate(alert.timestamp) }}</div>
             </div>
         </div>
     </div>
@@ -28,6 +28,7 @@
 
 <script setup lang="ts">
 import { getAlertIcon } from '@/stores/notificationStore';
+import { formatShortDate } from '@/utils/mapUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({

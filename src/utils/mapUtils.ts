@@ -46,16 +46,18 @@ export function createSensorChart(canvas: HTMLCanvasElement, labels: string[], v
 }
 
 export function formatShortDate(dateString: string): string {
-    const date = new Date(dateString);
+    let date = new Date(dateString);
 
     if (isNaN(date.getTime())) {
         console.error('Invalid date format:', dateString);
-        return 'Data non valida';
+        date = new Date()
     }
 
     return date.toLocaleDateString('it-IT', {
         day: 'numeric',
         month: 'numeric',
         year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
     });
 }
