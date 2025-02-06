@@ -89,7 +89,7 @@ async function markerOnClick(sensorId: string, e: { latlng: leaflet.LatLngExpres
     socket?.on('new-detection', (detection: Detection) => {
         detections.push(detection);
 
-        chart.data.labels?.push(detection.timestamp);
+        chart.data.labels?.push(formatShortDate(detection.timestamp));
         chart.data.datasets.forEach((dataset) => {
             dataset.data.push(detection.value);
 
