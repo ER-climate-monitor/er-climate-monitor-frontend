@@ -118,8 +118,9 @@ const unsubscribeSensor = (sensorId: string) => {
 
 const addMarkers = (locations: SensorLocation[]) => {
     locations.forEach((location) => {
-        const marker = leaflet.marker([location.latitude, location.longitude]);
-
+        const lat = location.latitude / 100000;
+        const lng = location.longitude / 100000;
+        const marker = leaflet.marker([lat, lng]);
         marker.on('click', (e) => markerOnClick(location.sensorId, e));
         map.addLayer(marker);
     });
