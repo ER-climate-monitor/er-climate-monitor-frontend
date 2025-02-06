@@ -8,14 +8,14 @@ import type { ChartConfiguration } from 'chart.js';
  * @param values - Array of sensor values for Y-axis
  * @returns Configured Chart instance
  */
-export function createSensorChart(canvas: HTMLCanvasElement, labels: string[], values: number[]): Chart {
+export function createSensorChart(title: string, canvas: HTMLCanvasElement, labels: string[], values: number[]): Chart {
     const config: ChartConfiguration<'line'> = {
         type: 'line',
         data: {
             labels,
             datasets: [
                 {
-                    label: 'Detection Values',
+                    label: title,
                     data: values,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
@@ -50,7 +50,7 @@ export function formatShortDate(dateString: string): string {
 
     if (isNaN(date.getTime())) {
         console.error('Invalid date format:', dateString);
-        date = new Date()
+        date = new Date();
     }
 
     return date.toLocaleDateString('it-IT', {

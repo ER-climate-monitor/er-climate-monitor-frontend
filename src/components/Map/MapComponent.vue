@@ -84,7 +84,7 @@ async function markerOnClick(sensorId: string, e: { latlng: leaflet.LatLngExpres
     const canvas = document.createElement('canvas');
     const popup = leaflet.popup().setLatLng(e.latlng).setContent(canvas).openOn(map);
 
-    const chart = createSensorChart(canvas, labels, values);
+    const chart = createSensorChart(sensorId, canvas, labels, values);
 
     socket?.on('new-detection', (detection: Detection) => {
         if (detection.sensorId === sensorId) {
