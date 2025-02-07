@@ -12,6 +12,7 @@ const config = {
         restoreSubscriptions: '/alert/subscriptions/restore',
         getUserAlerts: '/alert',
         apiWebSocketRooms: {
+            WEB_SOCKET_URL: 'http://notifications-service:4444',
             CONNECTION: 'connect',
             DISCONNECTION: 'disconnect',
             REGISTRATION: 'register',
