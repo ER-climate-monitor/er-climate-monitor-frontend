@@ -53,11 +53,15 @@ const isAdmin = ref(false);
 const userEmail = ref('');
 
 onMounted(async () => {
-    const response = await authorizedUser(userStore.token.value);
-    if (response.status === HttpStatusCode.Accepted) {
-        isAdmin.value = response.data['userRole'] == 'admin';
-        userEmail.value = response.data['userEmail'];
-    } else {
+    try {
+        const response = await authorizedUser(userStore.token.value);
+        if (response.status === HttpStatusCode.Accepted) {
+            isAdmin.value = response.data['userRole'] == 'admin';
+            userEmail.value = response.data['userEmail'];
+        } else {
+            userStore.removeToken();
+        }
+    } catch (error) {
         userStore.removeToken();
     }
 });

@@ -94,10 +94,14 @@ watch(
     () => userStore.token.value,
     async (newToken) => {
         if (newToken) {
-            const response = await authorizedUser(newToken);
-            if (response.status === HttpStatusCode.Accepted) {
-                isAdmin.value = response.data['userRole'] === 'admin';
-            } else {
+            try {
+                const response = await authorizedUser(newToken);
+                if (response.status === HttpStatusCode.Accepted) {
+                    isAdmin.value = response.data['userRole'] === 'admin';
+                } else {
+                    userStore.removeToken();
+                }
+            } catch (error) {
                 userStore.removeToken();
             }
         } else {
