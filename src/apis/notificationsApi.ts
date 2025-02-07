@@ -112,7 +112,7 @@ async function restoreSubscriptions() {
 }
 
 function establishSubscription<M>(uid: string, topicAddr: string, messageConsumer: (_: M) => void): Socket {
-    const scoket = io(`http://${API_HOST}:${API_PORT}`, { transports: ['websocket'] });
+    const scoket = io(config.subscriptionsApi.apiWebSocketRooms.WEB_SOCKET_URL, { transports: ['websocket'] });
     scoket.connect()
     scoket.on(config.subscriptionsApi.apiWebSocketRooms.CONNECTION, () => {
         Logger.info('Client successfully connected to socket for topic: ', topicAddr);
