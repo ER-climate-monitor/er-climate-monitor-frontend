@@ -1,9 +1,9 @@
-const API_HOST = import.meta.env.API_HOST || 'localhost';
-const API_PORT = import.meta.env.API_POST || '3000';
-const API_VERSION = import.meta.env.API_VERSION || 'v0';
+const API_HOST = "https://api-gateway-17633123551.europe-west8.run.app";
+const API_PORT = "8080";
+const API_VERSION = 'v0';
 
 const config = {
-    apiBaseUrl: `http://${API_HOST}:${API_PORT}/${API_VERSION}/api`,
+    apiBaseUrl: `${API_HOST}/${API_VERSION}/api`,
     apiAlertTopics: '/sensor/all',
     subscriptionsApi: {
         subscribeToTopic: '/alert/subscriptions',
@@ -12,7 +12,7 @@ const config = {
         restoreSubscriptions: '/alert/subscriptions/restore',
         getUserAlerts: '/alert',
         apiWebSocketRooms: {
-            WEB_SOCKET_URL: 'http://notifications-service:4444',
+            WEB_SOCKET_URL: 'https://notification-service-17633123551.europe-west8.run.app',
             CONNECTION: 'connect',
             DISCONNECTION: 'disconnect',
             REGISTRATION: 'register',
