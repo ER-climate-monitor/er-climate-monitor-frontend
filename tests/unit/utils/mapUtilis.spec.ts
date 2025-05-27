@@ -9,8 +9,8 @@ describe('createSensorChart', () => {
     // jsdom provides a minimal canvas element
     canvas = document.createElement('canvas')
     // stub getContext so Chart.js doesn't blow up
-    canvas.getContext = () => ({ // @ts-ignore
-      // only methods used internally by Chart.js need to exist
+    canvas.getContext = () => ({ 
+      // @ts-expect-error: minimal stub for CanvasRenderingContext2D methods
       fillRect: () => {},
       clearRect: () => {},
       getImageData: (_x: number, _y: number, w: number, h: number) => ({ data: new Array(w * h * 4) }),
@@ -50,9 +50,9 @@ describe('createSensorChart', () => {
     expect(chart.data.datasets[0].label).toBe('Test Sensor')
     expect(chart.data.datasets[0].data).toEqual(values)
 
-    // @ts-ignore
+    // @ts-expect-error: accessing scales on chart.options
     const xScale = chart.options.scales.x
-    // @ts-ignore
+    // @ts-expect-error: scales property not typed on ChartOptions type
     const yScale = chart.options.scales.y
     expect(xScale.title.display).toBe(true)
     expect(xScale.title.text).toBe('Timestamp')
