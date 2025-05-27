@@ -1,4 +1,4 @@
-import { API_HOST, API_PORT, config } from '@/config/config';
+import { config } from '@/config/config';
 import {
     useNotificationState,
     type Notification,

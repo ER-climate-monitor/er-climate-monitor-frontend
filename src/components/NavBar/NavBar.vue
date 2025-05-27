@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import ProfileModal from '@/components/NavBar/ProfileModal.vue';
 import NotificationModal from '@/components/Notification/NotificationModal.vue';
@@ -101,7 +101,7 @@ watch(
                 } else {
                     userStore.removeToken();
                 }
-            } catch (error) {
+            } catch {
                 userStore.removeToken();
             }
         } else {
