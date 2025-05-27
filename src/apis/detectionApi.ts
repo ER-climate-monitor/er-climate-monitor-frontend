@@ -2,6 +2,8 @@ import axios from 'axios';
 import type { SensorLocation } from '@/types/SensorLocation';
 import type { Detection } from '@/types/SensorDetection';
 import { USER_TOKEN_HEADER } from '@/headers/userHeaders';
+import { config } from '@/config/config';
+
 
 export const fetchSensorLocations = async (sensorType: string, token: string): Promise<SensorLocation[]> => {
     if (!sensorType) return [];
@@ -9,7 +11,7 @@ export const fetchSensorLocations = async (sensorType: string, token: string): P
     try {
         const headers = { [USER_TOKEN_HEADER]: token };
         const response = await axios.get<SensorLocation[]>(
-            `http://localhost:3000/v0/api/detection/${sensorType.toLowerCase()}/locations`,
+            `${config.apiBaseUrl}/v0/api/detection/${sensorType.toLowerCase()}/locations`,
             { headers: headers },
         );
 
@@ -30,7 +32,7 @@ export const fetchSensorDetections = async (
     try {
         const headers = { [USER_TOKEN_HEADER]: token };
         const response = await axios.get<Detection[]>(
-            `http://localhost:3000/v0/api/detection/${sensorType.toLowerCase()}/${sensorId}/detections?last=15`,
+            `${config.apiBaseUrl}/v0/api/detection/${sensorType.toLowerCase()}/${sensorId}/detections?last=15`,
             { headers: headers },
         );
 

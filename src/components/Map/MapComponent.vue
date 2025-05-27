@@ -13,6 +13,7 @@ import { createSensorChart, formatShortDate } from '@/utils/mapUtils';
 import type { Detection } from '@/types/SensorDetection';
 import { fetchSensorDetections } from '@/apis/detectionApi';
 import { useUserStore } from '@/stores/userStore';
+import { config } from '@/config/config';
 
 Chart.register(CategoryScale, LineController, LineElement, PointElement, LinearScale, Title);
 const { sensorType, locations } = defineProps({
@@ -58,7 +59,7 @@ onMounted(() => {
                 .addTo(map);
         });
 
-    socket = io('http://localhost:3000');
+    socket = io(config.apiBaseUrl);
 });
 
 onUnmounted(() => {
