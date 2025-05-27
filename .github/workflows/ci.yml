@@ -28,7 +28,7 @@ jobs:
         run: npm run lint
 
       - name: Run Tests
-        run: npm run test:unit
+        run: npm run test:unit -- coverage
 
       - name: Build Project
         run: npm run build
