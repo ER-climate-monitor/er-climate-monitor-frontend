@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { shallowMount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -5,8 +6,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import MapComponent from '@/components/Map/MapComponent.vue'
 import leaflet from 'leaflet'
 import { io } from 'socket.io-client'
-import * as detectionApi from '@/apis/detectionApi'
-import { useUserStore } from '@/stores/userStore'
 import { config } from '@/config/config'
 
 // Mock leaflet default export
