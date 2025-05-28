@@ -61,7 +61,7 @@ onMounted(async () => {
         } else {
             userStore.removeToken();
         }
-    } catch (error) {
+    } catch {
         userStore.removeToken();
     }
 });
