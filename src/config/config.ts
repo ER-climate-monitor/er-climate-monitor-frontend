@@ -4,6 +4,7 @@ const API_VERSION = 'v0';
 
 const config = {
     apiBaseUrl: `${API_HOST}/${API_VERSION}/api`,
+    socketBaseUrl: API_HOST,
     apiAlertTopics: '/sensor/all',
     subscriptionsApi: {
         subscribeToTopic: '/alert/subscriptions',
