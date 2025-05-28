@@ -11,7 +11,7 @@ export const fetchSensorLocations = async (sensorType: string, token: string): P
     try {
         const headers = { [USER_TOKEN_HEADER]: token };
         const response = await axios.get<SensorLocation[]>(
-            `${config.apiBaseUrl}/v0/api/detection/${sensorType.toLowerCase()}/locations`,
+            `${config.apiBaseUrl}/detection/${sensorType.toLowerCase()}/locations`,
             { headers: headers },
         );
 
@@ -32,7 +32,7 @@ export const fetchSensorDetections = async (
     try {
         const headers = { [USER_TOKEN_HEADER]: token };
         const response = await axios.get<Detection[]>(
-            `${config.apiBaseUrl}/v0/api/detection/${sensorType.toLowerCase()}/${sensorId}/detections?last=15`,
+            `${config.apiBaseUrl}/detection/${sensorType.toLowerCase()}/${sensorId}/detections?last=15`,
             { headers: headers },
         );
 
