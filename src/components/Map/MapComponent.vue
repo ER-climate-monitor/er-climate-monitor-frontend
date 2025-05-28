@@ -59,7 +59,7 @@ onMounted(() => {
                 .addTo(map);
         });
 
-    socket = io(config.apiBaseUrl);
+    socket = io(config.socketBaseUrl);
 });
 
 onUnmounted(() => {
