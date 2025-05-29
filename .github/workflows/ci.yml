@@ -1,34 +1,82 @@
-name: CI Pipeline
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+  schedule:
+    # Every Monday at 04:00 UTC
+    - cron: '0 4 * * 1'
+
+# Cancel previous runs on the same branch
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lint-and-test:
+  build:
+    # 22 → current LTS
+    # 20 → maintenance LTS
+    # 24 → upcoming LTS (early‑warning; allowed to fail)
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 20, 24]
+    continue-on-error: ${{ matrix.node == '24' }}  # "early warning" build
+
     runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps.setname.outputs.name }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node ${{ matrix.node }} & restore npm cache
+        uses: actions/setup-node@v4
         with:
-          node-version: '22.11.0'
+          node-version: ${{ matrix.node }}
+          cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run Linting
         run: npm run lint
 
-      - name: Run Tests
+      - name: Unit tests + coverage
         run: npm run test:unit -- --coverage
 
-      - name: Build Project
+      - name: Build production bundle
         run: npm run build
+
+      - name: Annotate bundle with commit SHA
+        run: echo "${{ github.sha }}" > dist/commit.txt
+
+      - id: setname
+        name: Define artifact name (dist‑<SHA>)
+        run: echo "name=dist-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload bundle as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.setname.outputs.name }}
+          path: dist
+          retention-days: 14
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download bundle from CI
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.artifact-name }}
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
+          publish_dir: ./dist
