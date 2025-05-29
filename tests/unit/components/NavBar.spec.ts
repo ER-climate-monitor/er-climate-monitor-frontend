@@ -142,7 +142,7 @@ describe('MapComponent.vue', () => {
     const wrapper = shallowMount(MapComponent, {
       props: { sensorType: 'temp', locations },
     })
-    expect(io).toHaveBeenCalledWith(config.apiBaseUrl)
+    expect(io).toHaveBeenCalledWith(config.socketBaseUrl)
 
     const socket = (io as any).mock.results[0].value
     wrapper.unmount()
