@@ -58,6 +58,7 @@ jobs:
         run: echo "name=dist-${{ github.sha }}" >> "$GITHUB_OUTPUT"
 
       - name: Upload bundle as artifact
+        if: ${{ matrix.node == '22' }}  # upload only for primary LTS
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.setname.outputs.name }}
