@@ -11,7 +11,7 @@
         "format": "prettier --write src/",
         "format:check": "prettier --check .",
         "precommit": "npm run lint-staged && npm test && npm run build",
-        "prepare": "husky",
+        "prepare": "husky install",
         "preview": "vite preview",
         "type-check": "vue-tsc --build",
         "prelint-staged": "node -e \"if (parseFloat(process.version.slice(1)) < 22) { console.error('Node.js >= 22.0 is required'); process.exit(1); }\""
