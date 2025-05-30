@@ -1,1 +1,0 @@
-import{d as s,c as t,b as r,t as o,o as a}from"./index-CJI4Cu0Z.js";import{_ as c}from"./_plugin-vue_export-helper-DlAUqK2U.js";const n={key:0,class:"error"},m=s({__name:"ErrorMessage",props:{message:{type:String,default:""}},setup(e){return(p,_)=>e.message?(a(),t("p",n,o(e.message),1)):r("",!0)}}),g=c(m,[["__scopeId","data-v-bdb07622"]]);export{g as E};
