@@ -10,6 +10,9 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production'
     ? '/er-climate-monitor-frontend/'
     : '/',
+  build: {
+    sourcemap: true,
+  },
   server: {
     proxy: {
       '/v0': {

@@ -15,7 +15,6 @@ import { fromTopicToTopicAddress } from '@/utils/notificationUtils';
 Logger.useDefaults();
 Logger.setLevel(Logger.ERROR);
 
-const { prependNotification, showNotificationPopup, getUnkonwnsId } = useNotificationState();
 const userStore = useUserStore();
 
 async function fetchAlertNotification(): Promise<Notification[]> {
@@ -94,6 +93,7 @@ async function unsubscribeToTopic(topic: Topic): Promise<boolean> {
 
 async function restoreSubscriptions() {
     try {
+        const { prependNotification, showNotificationPopup, getUnkonwnsId } = useNotificationState();
         const res = await httpRequest<null, { uid: string; topicAddr: string }[]>(
             'GET',
             `${config.apiBaseUrl}${config.subscriptionsApi.restoreSubscriptions}`,
